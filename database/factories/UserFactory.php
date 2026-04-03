@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Enums\Role;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
@@ -56,5 +57,70 @@ class UserFactory extends Factory
             'two_factor_recovery_codes' => encrypt(json_encode(['recovery-code-1'])),
             'two_factor_confirmed_at' => now(),
         ]);
+    }
+
+    /**
+     * Create the user as a student with a student profile.
+     */
+    public function asStudent(): static
+    {
+        return $this->afterCreating(function (User $user) {
+            $user->assignRole(Role::Student);
+            $user->studentProfile()->create(
+                StudentProfileFactory::new()->definition()
+            );
+        });
+    }
+
+    /**
+     * Create the user as an instructor with an instructor profile.
+     */
+    public function asInstructor(): static
+    {
+        return $this->afterCreating(function (User $user) {
+            $user->assignRole(Role::Instructor);
+            $user->instructorProfile()->create(
+                InstructorProfileFactory::new()->definition()
+            );
+        });
+    }
+
+    /**
+     * Create the user as an admin with a staff profile.
+     */
+    public function asAdmin(): static
+    {
+        return $this->afterCreating(function (User $user) {
+            $user->assignRole(Role::Admin);
+            $user->staffProfile()->create(
+                StaffProfileFactory::new()->definition()
+            );
+        });
+    }
+
+    /**
+     * Create the user as a registrar with a staff profile.
+     */
+    public function asRegistrar(): static
+    {
+        return $this->afterCreating(function (User $user) {
+            $user->assignRole(Role::Registrar);
+            $user->staffProfile()->create(
+                StaffProfileFactory::new()->definition()
+            );
+        });
+    }
+
+    /**
+     * Create the user as a super admin with a staff profile.
+     */
+    public function asSuperAdmin(): static
+    {
+        return $this->afterCreating(function (User $user) {
+            $user->assignRole(Role::SuperAdmin);
+            $user->staffProfile()->create(
+                StaffProfileFactory::new()->definition()
+            );
+        });
     }
 }
