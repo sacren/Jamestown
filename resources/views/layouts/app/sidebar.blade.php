@@ -17,10 +17,22 @@
                     </flux:sidebar.item>
                 </flux:sidebar.group>
 
+                <flux:sidebar.group :heading="__('Academics')" class="grid">
+                    <flux:sidebar.item icon="rectangle-stack" :href="route('catalog.programs')" :current="request()->routeIs('catalog.*')" wire:navigate>
+                        {{ __('Program Catalog') }}
+                    </flux:sidebar.item>
+                </flux:sidebar.group>
+
                 @role('super-admin|admin')
                 <flux:sidebar.group :heading="__('Administration')" class="grid">
                     <flux:sidebar.item icon="users" :href="route('admin.users.index')" :current="request()->routeIs('admin.users.*')" wire:navigate>
                         {{ __('Users') }}
+                    </flux:sidebar.item>
+                    <flux:sidebar.item icon="academic-cap" :href="route('admin.programs.index')" :current="request()->routeIs('admin.programs.*')" wire:navigate>
+                        {{ __('Programs') }}
+                    </flux:sidebar.item>
+                    <flux:sidebar.item icon="book-open" :href="route('admin.courses.index')" :current="request()->routeIs('admin.courses.*')" wire:navigate>
+                        {{ __('Courses') }}
                     </flux:sidebar.item>
                 </flux:sidebar.group>
                 @endrole
