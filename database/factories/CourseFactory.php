@@ -1,0 +1,46 @@
+<?php
+
+namespace Database\Factories;
+
+use App\Models\Course;
+use App\Models\Program;
+use Illuminate\Database\Eloquent\Factories\Factory;
+
+/**
+ * @extends Factory<Course>
+ */
+class CourseFactory extends Factory
+{
+    /**
+     * Define the model's default state.
+     *
+     * @return array<string, mixed>
+     */
+    public function definition(): array
+    {
+        return [
+            'program_id' => ProgramFactory::new(),
+            'name' => fake()->unique()->words(3, true),
+            'code' => strtoupper(fake()->unique()->bothify('???-###')),
+            'description' => fake()->paragraph(),
+            'credit_hours' => fake()->numberBetween(1, 4),
+            'lecture_hours' => fake()->numberBetween(1, 3),
+            'lab_hours' => fake()->numberBetween(0, 4),
+            'is_active' => true,
+        ];
+    }
+
+    public function inactive(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'is_active' => false,
+        ]);
+    }
+
+    public function forProgram(Program $program): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'program_id' => $program->id,
+        ]);
+    }
+}
