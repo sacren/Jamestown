@@ -23,17 +23,43 @@
                     </flux:sidebar.item>
                 </flux:sidebar.group>
 
-                @role('super-admin|admin')
+                @role('super-admin|admin|registrar')
                 <flux:sidebar.group :heading="__('Administration')" class="grid">
+                    @can('manage-users')
                     <flux:sidebar.item icon="users" :href="route('admin.users.index')" :current="request()->routeIs('admin.users.*')" wire:navigate>
                         {{ __('Users') }}
                     </flux:sidebar.item>
+                    @endcan
+
+                    @can('manage-programs')
                     <flux:sidebar.item icon="academic-cap" :href="route('admin.programs.index')" :current="request()->routeIs('admin.programs.*')" wire:navigate>
                         {{ __('Programs') }}
                     </flux:sidebar.item>
+                    @endcan
+
+                    @can('manage-courses')
                     <flux:sidebar.item icon="book-open" :href="route('admin.courses.index')" :current="request()->routeIs('admin.courses.*')" wire:navigate>
                         {{ __('Courses') }}
                     </flux:sidebar.item>
+                    @endcan
+
+                    @can('manage-terms')
+                    <flux:sidebar.item icon="calendar" :href="route('admin.terms.index')" :current="request()->routeIs('admin.terms.*')" wire:navigate>
+                        {{ __('Terms') }}
+                    </flux:sidebar.item>
+                    @endcan
+
+                    @can('manage-rooms')
+                    <flux:sidebar.item icon="building-office" :href="route('admin.rooms.index')" :current="request()->routeIs('admin.rooms.*')" wire:navigate>
+                        {{ __('Rooms') }}
+                    </flux:sidebar.item>
+                    @endcan
+
+                    @can('manage-sections')
+                    <flux:sidebar.item icon="table-cells" :href="route('admin.sections.index')" :current="request()->routeIs('admin.sections.*')" wire:navigate>
+                        {{ __('Sections') }}
+                    </flux:sidebar.item>
+                    @endcan
                 </flux:sidebar.group>
                 @endrole
             </flux:sidebar.nav>
