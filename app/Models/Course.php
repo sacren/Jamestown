@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 #[Fillable(['program_id', 'name', 'code', 'description', 'credit_hours', 'lecture_hours', 'lab_hours', 'is_active'])]
 class Course extends Model
@@ -40,6 +41,11 @@ class Course extends Model
     {
         return $this->belongsToMany(self::class, 'course_prerequisites', 'prerequisite_id', 'course_id')
             ->withTimestamps();
+    }
+
+    public function sections(): HasMany
+    {
+        return $this->hasMany(Section::class);
     }
 
     public function totalContactHours(): int
