@@ -19,3 +19,26 @@ Route::middleware(['auth', 'verified', 'role:super-admin|admin'])->prefix('admin
     Route::livewire('courses/create', 'pages::admin.courses.create')->name('courses.create');
     Route::livewire('courses/{course}/edit', 'pages::admin.courses.edit')->name('courses.edit');
 });
+
+Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(function () {
+    // Terms
+    Route::middleware('permission:manage-terms')->group(function () {
+        Route::livewire('terms', 'pages::admin.terms.index')->name('terms.index');
+        Route::livewire('terms/create', 'pages::admin.terms.create')->name('terms.create');
+        Route::livewire('terms/{term}/edit', 'pages::admin.terms.edit')->name('terms.edit');
+    });
+
+    // Rooms
+    Route::middleware('permission:manage-rooms')->group(function () {
+        Route::livewire('rooms', 'pages::admin.rooms.index')->name('rooms.index');
+        Route::livewire('rooms/create', 'pages::admin.rooms.create')->name('rooms.create');
+        Route::livewire('rooms/{room}/edit', 'pages::admin.rooms.edit')->name('rooms.edit');
+    });
+
+    // Sections
+    Route::middleware('permission:manage-sections')->group(function () {
+        Route::livewire('sections', 'pages::admin.sections.index')->name('sections.index');
+        Route::livewire('sections/create', 'pages::admin.sections.create')->name('sections.create');
+        Route::livewire('sections/{section}/edit', 'pages::admin.sections.edit')->name('sections.edit');
+    });
+});
