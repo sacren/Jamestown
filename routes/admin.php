@@ -41,4 +41,10 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
         Route::livewire('sections/create', 'pages::admin.sections.create')->name('sections.create');
         Route::livewire('sections/{section}/edit', 'pages::admin.sections.edit')->name('sections.edit');
     });
+
+    // Enrollments
+    Route::middleware('permission:manage-enrollments')->group(function () {
+        Route::livewire('enrollments', 'pages::admin.enrollments.index')->name('enrollments.index');
+        Route::livewire('enrollments/create', 'pages::admin.enrollments.create')->name('enrollments.create');
+    });
 });
