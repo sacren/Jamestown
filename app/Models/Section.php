@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\EnrollmentStatus;
 use Database\Factories\SectionFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -41,6 +42,16 @@ class Section extends Model
     public function schedules(): HasMany
     {
         return $this->hasMany(SectionSchedule::class);
+    }
+
+    public function enrollments(): HasMany
+    {
+        return $this->hasMany(Enrollment::class);
+    }
+
+    public function currentEnrollmentCount(): int
+    {
+        return $this->enrollments()->where('status', EnrollmentStatus::Enrolled)->count();
     }
 
     public function displayCode(): string
