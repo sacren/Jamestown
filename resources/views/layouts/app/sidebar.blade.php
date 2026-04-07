@@ -21,6 +21,15 @@
                     <flux:sidebar.item icon="rectangle-stack" :href="route('catalog.programs')" :current="request()->routeIs('catalog.*')" wire:navigate>
                         {{ __('Program Catalog') }}
                     </flux:sidebar.item>
+
+                    @role('student')
+                    <flux:sidebar.item icon="clipboard-document-list" :href="route('registration.sections')" :current="request()->routeIs('registration.sections')" wire:navigate>
+                        {{ __('Registration') }}
+                    </flux:sidebar.item>
+                    <flux:sidebar.item icon="calendar-days" :href="route('registration.schedule')" :current="request()->routeIs('registration.schedule')" wire:navigate>
+                        {{ __('My Schedule') }}
+                    </flux:sidebar.item>
+                    @endrole
                 </flux:sidebar.group>
 
                 @role('super-admin|admin|registrar')
@@ -58,6 +67,12 @@
                     @can('manage-sections')
                     <flux:sidebar.item icon="table-cells" :href="route('admin.sections.index')" :current="request()->routeIs('admin.sections.*')" wire:navigate>
                         {{ __('Sections') }}
+                    </flux:sidebar.item>
+                    @endcan
+
+                    @can('manage-enrollments')
+                    <flux:sidebar.item icon="clipboard-document-check" :href="route('admin.enrollments.index')" :current="request()->routeIs('admin.enrollments.*')" wire:navigate>
+                        {{ __('Enrollments') }}
                     </flux:sidebar.item>
                     @endcan
                 </flux:sidebar.group>
