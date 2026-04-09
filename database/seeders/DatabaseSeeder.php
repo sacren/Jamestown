@@ -50,6 +50,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             TermSectionRoomSeeder::class,
             EnrollmentSeeder::class,
+            AttendanceSeeder::class,
         ]);
     }
 }
