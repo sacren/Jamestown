@@ -29,8 +29,19 @@
                     <flux:sidebar.item icon="calendar-days" :href="route('registration.schedule')" :current="request()->routeIs('registration.schedule')" wire:navigate>
                         {{ __('My Schedule') }}
                     </flux:sidebar.item>
+                    <flux:sidebar.item icon="check-badge" :href="route('registration.attendance')" :current="request()->routeIs('registration.attendance')" wire:navigate>
+                        {{ __('My Attendance') }}
+                    </flux:sidebar.item>
                     @endrole
                 </flux:sidebar.group>
+
+                @role('instructor')
+                <flux:sidebar.group :heading="__('Teaching')" class="grid">
+                    <flux:sidebar.item icon="clipboard-document-list" :href="route('instructor.sections')" :current="request()->routeIs('instructor.*')" wire:navigate>
+                        {{ __('My Sections') }}
+                    </flux:sidebar.item>
+                </flux:sidebar.group>
+                @endrole
 
                 @role('super-admin|admin|registrar')
                 <flux:sidebar.group :heading="__('Administration')" class="grid">
@@ -73,6 +84,12 @@
                     @can('manage-enrollments')
                     <flux:sidebar.item icon="clipboard-document-check" :href="route('admin.enrollments.index')" :current="request()->routeIs('admin.enrollments.*')" wire:navigate>
                         {{ __('Enrollments') }}
+                    </flux:sidebar.item>
+                    @endcan
+
+                    @can('manage-attendance')
+                    <flux:sidebar.item icon="check-badge" :href="route('admin.attendance.index')" :current="request()->routeIs('admin.attendance.*')" wire:navigate>
+                        {{ __('Attendance') }}
                     </flux:sidebar.item>
                     @endcan
                 </flux:sidebar.group>
