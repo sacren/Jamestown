@@ -32,6 +32,9 @@
                     <flux:sidebar.item icon="check-badge" :href="route('registration.attendance')" :current="request()->routeIs('registration.attendance')" wire:navigate>
                         {{ __('My Attendance') }}
                     </flux:sidebar.item>
+                    <flux:sidebar.item icon="chart-bar" :href="route('registration.grades')" :current="request()->routeIs('registration.grades')" wire:navigate>
+                        {{ __('My Grades') }}
+                    </flux:sidebar.item>
                     @endrole
                 </flux:sidebar.group>
 
@@ -90,6 +93,12 @@
                     @can('manage-attendance')
                     <flux:sidebar.item icon="check-badge" :href="route('admin.attendance.index')" :current="request()->routeIs('admin.attendance.*')" wire:navigate>
                         {{ __('Attendance') }}
+                    </flux:sidebar.item>
+                    @endcan
+
+                    @can('manage-grades')
+                    <flux:sidebar.item icon="chart-bar" :href="route('admin.grades.index')" :current="request()->routeIs('admin.grades.*')" wire:navigate>
+                        {{ __('Grades') }}
                     </flux:sidebar.item>
                     @endcan
                 </flux:sidebar.group>
