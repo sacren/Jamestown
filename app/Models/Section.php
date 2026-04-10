@@ -49,6 +49,11 @@ class Section extends Model
         return $this->hasMany(Enrollment::class);
     }
 
+    public function assessments(): HasMany
+    {
+        return $this->hasMany(Assessment::class);
+    }
+
     public function currentEnrollmentCount(): int
     {
         return $this->enrollments()->where('status', EnrollmentStatus::Enrolled)->count();
