@@ -77,12 +77,21 @@ new #[Title('My Sections')] class extends Component {
                         <flux:table.cell class="whitespace-nowrap">{{ $section->scheduleSummary() }}</flux:table.cell>
                         <flux:table.cell>{{ $section->currentEnrollmentCount() }}/{{ $section->max_enrollment }}</flux:table.cell>
                         <flux:table.cell>
-                            <div class="flex justify-end gap-2">
+                            <div class="flex flex-wrap justify-end gap-2">
                                 <flux:button size="sm" :href="route('instructor.attendance.record', $section)" wire:navigate>
                                     {{ __('Record Attendance') }}
                                 </flux:button>
                                 <flux:button variant="ghost" size="sm" :href="route('instructor.attendance.summary', $section)" wire:navigate>
                                     {{ __('Summary') }}
+                                </flux:button>
+                                <flux:button variant="ghost" size="sm" :href="route('instructor.assessments.index', $section)" wire:navigate>
+                                    {{ __('Assessments') }}
+                                </flux:button>
+                                <flux:button variant="ghost" size="sm" :href="route('instructor.grades.entry', $section)" wire:navigate>
+                                    {{ __('Grades') }}
+                                </flux:button>
+                                <flux:button variant="ghost" size="sm" :href="route('instructor.grades.gradebook', $section)" wire:navigate>
+                                    {{ __('Gradebook') }}
                                 </flux:button>
                             </div>
                         </flux:table.cell>
