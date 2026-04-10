@@ -53,4 +53,10 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
         Route::livewire('attendance', 'pages::admin.attendance.index')->name('attendance.index');
         Route::livewire('attendance/section/{section}', 'pages::admin.attendance.record')->name('attendance.record');
     });
+
+    // Grades
+    Route::middleware('permission:manage-grades')->group(function () {
+        Route::livewire('grades', 'pages::admin.grades.index')->name('grades.index');
+        Route::livewire('grades/section/{section}', 'pages::admin.grades.manage')->name('grades.manage');
+    });
 });
