@@ -93,7 +93,9 @@ new #[Title('My Grades')] class extends Component {
         @if ($this->summary->isNotEmpty())
             <div class="mb-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 @foreach ($this->summary as $row)
-                    @php($color = $row->percentage >= 90 ? 'green' : ($row->percentage >= 70 ? 'amber' : 'red'))
+                    @php
+                        $color = $row->percentage >= 90 ? 'green' : ($row->percentage >= 70 ? 'amber' : 'red');
+                    @endphp
                     <div class="rounded-lg border border-zinc-200 p-4 dark:border-zinc-700">
                         <div class="font-semibold">{{ $row->section->course->code }}</div>
                         <div class="text-sm text-zinc-600 dark:text-zinc-400">{{ $row->section->course->name }}</div>
