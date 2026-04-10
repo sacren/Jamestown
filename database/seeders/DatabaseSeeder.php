@@ -51,6 +51,8 @@ class DatabaseSeeder extends Seeder
             TermSectionRoomSeeder::class,
             EnrollmentSeeder::class,
             AttendanceSeeder::class,
+            AssessmentSeeder::class,
+            GradeSeeder::class,
         ]);
     }
 }
