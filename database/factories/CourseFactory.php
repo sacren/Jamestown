@@ -26,6 +26,7 @@ class CourseFactory extends Factory
             'credit_hours' => fake()->numberBetween(1, 4),
             'lecture_hours' => fake()->numberBetween(1, 3),
             'lab_hours' => fake()->numberBetween(0, 4),
+            'tuition_amount' => fake()->randomElement([450, 500, 600, 750, 900]),
             'is_active' => true,
         ];
     }
