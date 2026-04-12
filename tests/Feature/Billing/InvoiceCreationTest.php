@@ -88,3 +88,71 @@ test('due_at matches term start date', function () {
 
     expect($invoice->due_at->toDateString())->toBe('2027-01-15');
 });
+
+test('invoice is auto-created when a student enrolls via registration page', function () {
+    $student = \App\Models\User::factory()->asStudent()->create();
+    $course = Course::factory()->create(['tuition_amount' => 600]);
+    $term = Term::factory()->create([
+        'registration_start' => now()->subDay(),
+        'registration_end' => now()->addDays(7),
+        'start_date' => now()->addDays(14)->toDateString(),
+    ]);
+    $section = Section::factory()->create([
+        'course_id' => $course->id,
+        'term_id' => $term->id,
+        'is_active' => true,
+    ]);
+
+    $this->actingAs($student);
+
+    \Livewire\Livewire::test('pages::registration.sections')
+        ->call('enroll', $section->id);
+
+    $enrollment = Enrollment::where('user_id', $student->id)->first();
+    expect($enrollment)->not->toBeNull();
+    expect($enrollment->invoice)->not->toBeNull();
+    expect((float) $enrollment->invoice->amount_due)->toBe(600.0);
+});
+
+test('dropping an enrollment with zero payments voids its invoice', function () {
+    $student = \App\Models\User::factory()->asStudent()->create();
+    $term = Term::factory()->create([
+        'registration_start' => now()->subDay(),
+        'registration_end' => now()->addDays(7),
+    ]);
+    $section = Section::factory()->create(['term_id' => $term->id]);
+    $enrollment = Enrollment::factory()
+        ->forStudent($student)
+        ->forSection($section)
+        ->create();
+    $invoice = Invoice::factory()->forEnrollment($enrollment)->create();
+
+    $this->actingAs($student);
+
+    \Livewire\Livewire::test('pages::registration.schedule')
+        ->call('dropEnrollment', $enrollment->id);
+
+    expect($invoice->fresh()->isVoided())->toBeTrue();
+});
+
+test('dropping an enrollment with payments does not void its invoice', function () {
+    $student = \App\Models\User::factory()->asStudent()->create();
+    $term = Term::factory()->create([
+        'registration_start' => now()->subDay(),
+        'registration_end' => now()->addDays(7),
+    ]);
+    $section = Section::factory()->create(['term_id' => $term->id]);
+    $enrollment = Enrollment::factory()
+        ->forStudent($student)
+        ->forSection($section)
+        ->create();
+    $invoice = Invoice::factory()->forEnrollment($enrollment)->create(['amount_due' => 500]);
+    \App\Models\Payment::factory()->forInvoice($invoice)->create(['amount' => 250]);
+
+    $this->actingAs($student);
+
+    \Livewire\Livewire::test('pages::registration.schedule')
+        ->call('dropEnrollment', $enrollment->id);
+
+    expect($invoice->fresh()->isVoided())->toBeFalse();
+});
