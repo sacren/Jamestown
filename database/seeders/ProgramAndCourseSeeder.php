@@ -90,6 +90,8 @@ class ProgramAndCourseSeeder extends Seeder
 
         $courses = [];
 
+        $tuitionOptions = [450, 500, 600, 750, 900];
+
         foreach ($courseData as $code => $attrs) {
             $programCode = $attrs['program'];
             unset($attrs['program']);
@@ -98,6 +100,7 @@ class ProgramAndCourseSeeder extends Seeder
                 'program_id' => $programs[$programCode]->id,
                 'code' => $code,
                 'description' => "Course covering {$attrs['name']}.",
+                'tuition_amount' => $tuitionOptions[array_rand($tuitionOptions)],
                 ...$attrs,
             ]);
         }
