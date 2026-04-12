@@ -53,6 +53,7 @@ class DatabaseSeeder extends Seeder
             AttendanceSeeder::class,
             AssessmentSeeder::class,
             GradeSeeder::class,
+            PaymentSeeder::class,
         ]);
     }
 }
