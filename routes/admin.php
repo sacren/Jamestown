@@ -59,4 +59,10 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
         Route::livewire('grades', 'pages::admin.grades.index')->name('grades.index');
         Route::livewire('grades/section/{section}', 'pages::admin.grades.manage')->name('grades.manage');
     });
+
+    // Invoices / Billing
+    Route::middleware('permission:invoices.view-any')->group(function () {
+        Route::livewire('invoices', 'pages::admin.invoices.index')->name('invoices.index');
+        Route::livewire('invoices/{invoice}', 'pages::admin.invoices.show')->name('invoices.show');
+    });
 });
