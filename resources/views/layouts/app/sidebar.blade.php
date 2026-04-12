@@ -35,6 +35,9 @@
                     <flux:sidebar.item icon="chart-bar" :href="route('registration.grades')" :current="request()->routeIs('registration.grades')" wire:navigate>
                         {{ __('My Grades') }}
                     </flux:sidebar.item>
+                    <flux:sidebar.item icon="banknotes" :href="route('registration.invoices.index')" :current="request()->routeIs('registration.invoices.*')" wire:navigate>
+                        {{ __('My Billing') }}
+                    </flux:sidebar.item>
                     @endrole
                 </flux:sidebar.group>
 
@@ -99,6 +102,12 @@
                     @can('manage-grades')
                     <flux:sidebar.item icon="chart-bar" :href="route('admin.grades.index')" :current="request()->routeIs('admin.grades.*')" wire:navigate>
                         {{ __('Grades') }}
+                    </flux:sidebar.item>
+                    @endcan
+
+                    @can('invoices.view-any')
+                    <flux:sidebar.item icon="banknotes" :href="route('admin.invoices.index')" :current="request()->routeIs('admin.invoices.*')" wire:navigate>
+                        {{ __('Billing') }}
                     </flux:sidebar.item>
                     @endcan
                 </flux:sidebar.group>
