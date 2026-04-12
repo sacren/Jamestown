@@ -7,4 +7,6 @@ Route::middleware(['auth', 'verified', 'role:student'])->prefix('registration')-
     Route::livewire('/schedule', 'pages::registration.schedule')->name('schedule');
     Route::livewire('/attendance', 'pages::registration.attendance')->name('attendance');
     Route::livewire('/grades', 'pages::registration.grades')->name('grades');
+    Route::livewire('/invoices', 'pages::registration.invoices.index')->name('invoices.index');
+    Route::livewire('/invoices/{invoice}', 'pages::registration.invoices.show')->name('invoices.show');
 });
