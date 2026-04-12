@@ -31,6 +31,11 @@ class RoleAndPermissionSeeder extends Seeder
             'manage-terms',
             'manage-rooms',
             'manage-sections',
+            'invoices.view-any',
+            'invoices.view-own',
+            'invoices.manage',
+            'payments.create',
+            'payments.delete',
         ];
 
         foreach ($permissions as $permission) {
@@ -45,11 +50,21 @@ class RoleAndPermissionSeeder extends Seeder
             ->givePermissionTo($permissions);
 
         SpatieRole::findOrCreate(Role::Registrar->value)
-            ->givePermissionTo(['manage-users', 'manage-enrollments', 'view-reports', 'manage-terms', 'manage-sections']);
+            ->givePermissionTo([
+                'manage-users',
+                'manage-enrollments',
+                'view-reports',
+                'manage-terms',
+                'manage-sections',
+                'invoices.view-any',
+                'invoices.manage',
+                'payments.create',
+            ]);
 
         SpatieRole::findOrCreate(Role::Instructor->value)
             ->givePermissionTo(['manage-grades', 'manage-attendance']);
 
-        SpatieRole::findOrCreate(Role::Student->value);
+        SpatieRole::findOrCreate(Role::Student->value)
+            ->givePermissionTo(['invoices.view-own']);
     }
 }
