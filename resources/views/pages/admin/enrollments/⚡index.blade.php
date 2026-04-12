@@ -43,6 +43,8 @@ new #[Title('Enrollment Management')] class extends Component {
             'status' => EnrollmentStatus::Dropped,
             'dropped_at' => now(),
         ]);
+
+        $this->voidInvoiceIfUnpaid($enrollment);
     }
 
     public function withdrawEnrollment(int $enrollmentId): void
@@ -52,6 +54,16 @@ new #[Title('Enrollment Management')] class extends Component {
             'status' => EnrollmentStatus::Withdrawn,
             'dropped_at' => now(),
         ]);
+
+        $this->voidInvoiceIfUnpaid($enrollment);
+    }
+
+    private function voidInvoiceIfUnpaid(Enrollment $enrollment): void
+    {
+        $invoice = $enrollment->invoice()->first();
+        if ($invoice && ! $invoice->isVoided() && $invoice->payments()->count() === 0) {
+            $invoice->update(['voided_at' => now()]);
+        }
     }
 
     #[Computed]

@@ -1,5 +1,6 @@
 <?php
 
+use App\Actions\Billing\CreateInvoiceForEnrollment;
 use App\Concerns\EnrollmentValidationRules;
 use App\Enums\EnrollmentStatus;
 use App\Models\Enrollment;
@@ -38,12 +39,14 @@ new #[Title('Manual Enrollment')] class extends Component {
             return;
         }
 
-        Enrollment::create([
+        $enrollment = Enrollment::create([
             'user_id' => $student->id,
             'section_id' => $section->id,
             'status' => EnrollmentStatus::Enrolled,
             'enrolled_at' => now(),
         ]);
+
+        app(CreateInvoiceForEnrollment::class)->handle($enrollment);
 
         $this->redirect(route('admin.enrollments.index'), navigate: true);
     }

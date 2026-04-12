@@ -1,5 +1,6 @@
 <?php
 
+use App\Actions\Billing\CreateInvoiceForEnrollment;
 use App\Concerns\EnrollmentValidationRules;
 use App\Enums\EnrollmentStatus;
 use App\Models\Enrollment;
@@ -77,12 +78,14 @@ new #[Title('Course Registration')] class extends Component {
             return;
         }
 
-        Enrollment::create([
+        $enrollment = Enrollment::create([
             'user_id' => $student->id,
             'section_id' => $section->id,
             'status' => EnrollmentStatus::Enrolled,
             'enrolled_at' => now(),
         ]);
+
+        app(CreateInvoiceForEnrollment::class)->handle($enrollment);
 
         session()->flash('success', 'Successfully enrolled in '.$section->course->code.'-'.$section->section_number.'.');
 

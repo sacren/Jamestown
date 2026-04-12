@@ -42,6 +42,11 @@ new #[Title('My Schedule')] class extends Component {
             'dropped_at' => now(),
         ]);
 
+        $invoice = $enrollment->invoice()->first();
+        if ($invoice && ! $invoice->isVoided() && $invoice->payments()->count() === 0) {
+            $invoice->update(['voided_at' => now()]);
+        }
+
         session()->flash('success', 'Successfully dropped '.$enrollment->section->course->code.'-'.$enrollment->section->section_number.'.');
 
         unset($this->enrollments);
