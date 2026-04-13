@@ -38,6 +38,12 @@
                     <flux:sidebar.item icon="banknotes" :href="route('registration.invoices.index')" :current="request()->routeIs('registration.invoices.*')" wire:navigate>
                         {{ __('My Billing') }}
                     </flux:sidebar.item>
+                    <flux:sidebar.item icon="document-check" :href="route('registration.certificates.index')" :current="request()->routeIs('registration.certificates.*')" wire:navigate>
+                        {{ __('My Certificates') }}
+                    </flux:sidebar.item>
+                    <flux:sidebar.item icon="document-text" :href="route('registration.transcript')" :current="request()->routeIs('registration.transcript')" wire:navigate>
+                        {{ __('My Transcript') }}
+                    </flux:sidebar.item>
                     @endrole
                 </flux:sidebar.group>
 
