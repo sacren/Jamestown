@@ -58,6 +58,20 @@ new #[Title('Enrollment Management')] class extends Component {
         $this->voidInvoiceIfUnpaid($enrollment);
     }
 
+    public function completeEnrollment(int $enrollmentId): void
+    {
+        $enrollment = Enrollment::findOrFail($enrollmentId);
+
+        if ($enrollment->status !== EnrollmentStatus::Enrolled) {
+            return;
+        }
+
+        $enrollment->update([
+            'status' => EnrollmentStatus::Completed,
+            'completed_at' => now(),
+        ]);
+    }
+
     private function voidInvoiceIfUnpaid(Enrollment $enrollment): void
     {
         $invoice = $enrollment->invoice()->first();
@@ -167,6 +181,9 @@ new #[Title('Enrollment Management')] class extends Component {
                                 </flux:button>
                                 <flux:button variant="ghost" size="sm" wire:click="withdrawEnrollment({{ $enrollment->id }})" wire:confirm="{{ __('Are you sure you want to withdraw this student?') }}">
                                     {{ __('Withdraw') }}
+                                </flux:button>
+                                <flux:button variant="primary" size="sm" wire:click="completeEnrollment({{ $enrollment->id }})" wire:confirm="{{ __('Are you sure you want to mark this enrollment as completed?') }}">
+                                    {{ __('Complete') }}
                                 </flux:button>
                             </div>
                         @endif
