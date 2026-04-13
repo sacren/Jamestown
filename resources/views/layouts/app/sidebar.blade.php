@@ -110,6 +110,12 @@
                         {{ __('Billing') }}
                     </flux:sidebar.item>
                     @endcan
+
+                    @can('certificates.view-any')
+                    <flux:sidebar.item icon="document-check" :href="route('admin.certificates.index')" :current="request()->routeIs('admin.certificates.*')" wire:navigate>
+                        {{ __('Certificates') }}
+                    </flux:sidebar.item>
+                    @endcan
                 </flux:sidebar.group>
                 @endrole
             </flux:sidebar.nav>
