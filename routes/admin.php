@@ -65,4 +65,11 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
         Route::livewire('invoices', 'pages::admin.invoices.index')->name('invoices.index');
         Route::livewire('invoices/{invoice}', 'pages::admin.invoices.show')->name('invoices.show');
     });
+
+    // Certificates
+    Route::middleware('permission:certificates.view-any')->group(function () {
+        Route::livewire('certificates', 'pages::admin.certificates.index')->name('certificates.index');
+        Route::livewire('certificates/issue', 'pages::admin.certificates.issue')->name('certificates.issue');
+        Route::livewire('certificates/{certificate}', 'pages::admin.certificates.show')->name('certificates.show');
+    });
 });
