@@ -69,6 +69,11 @@ class User extends Authenticatable
         return $this->hasMany(Payment::class, 'recorded_by');
     }
 
+    public function certificates(): HasMany
+    {
+        return $this->hasMany(Certificate::class);
+    }
+
     public function studentProfile(): HasOne
     {
         return $this->hasOne(StudentProfile::class);

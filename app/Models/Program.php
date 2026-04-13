@@ -33,4 +33,9 @@ class Program extends Model
     {
         return $this->hasMany(Course::class)->where('is_active', true);
     }
+
+    public function certificates(): HasMany
+    {
+        return $this->hasMany(Certificate::class);
+    }
 }
