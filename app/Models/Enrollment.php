@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
-#[Fillable(['user_id', 'section_id', 'status', 'enrolled_at', 'dropped_at'])]
+#[Fillable(['user_id', 'section_id', 'status', 'enrolled_at', 'dropped_at', 'completed_at'])]
 class Enrollment extends Model
 {
     /** @use HasFactory<EnrollmentFactory> */
@@ -23,6 +23,7 @@ class Enrollment extends Model
             'status' => EnrollmentStatus::class,
             'enrolled_at' => 'datetime',
             'dropped_at' => 'datetime',
+            'completed_at' => 'datetime',
         ];
     }
 
