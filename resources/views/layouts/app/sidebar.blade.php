@@ -134,7 +134,10 @@
 
             <flux:spacer />
 
-            <x-desktop-user-menu class="hidden lg:block" :name="auth()->user()->name" />
+            <div class="hidden items-center gap-2 lg:flex">
+                <x-notification-bell />
+                <x-desktop-user-menu :name="auth()->user()->name" />
+            </div>
         </flux:sidebar>
 
         <!-- Mobile User Menu -->
@@ -142,6 +145,8 @@
             <flux:sidebar.toggle class="lg:hidden" icon="bars-2" inset="left" />
 
             <flux:spacer />
+
+            <x-notification-bell />
 
             <flux:dropdown position="top" align="end">
                 <flux:profile
