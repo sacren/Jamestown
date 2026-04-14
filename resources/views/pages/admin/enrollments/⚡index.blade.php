@@ -3,6 +3,8 @@
 use App\Enums\EnrollmentStatus;
 use App\Models\Enrollment;
 use App\Models\Term;
+use App\Models\User;
+use App\Notifications\EnrollmentStatusChanged;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Title;
 use Livewire\Attributes\Url;
@@ -45,6 +47,8 @@ new #[Title('Enrollment Management')] class extends Component {
         ]);
 
         $this->voidInvoiceIfUnpaid($enrollment);
+
+        User::find($enrollment->user_id)->notify(new EnrollmentStatusChanged($enrollment, EnrollmentStatus::Dropped));
     }
 
     public function withdrawEnrollment(int $enrollmentId): void
@@ -56,6 +60,8 @@ new #[Title('Enrollment Management')] class extends Component {
         ]);
 
         $this->voidInvoiceIfUnpaid($enrollment);
+
+        User::find($enrollment->user_id)->notify(new EnrollmentStatusChanged($enrollment, EnrollmentStatus::Withdrawn));
     }
 
     public function completeEnrollment(int $enrollmentId): void
@@ -70,6 +76,8 @@ new #[Title('Enrollment Management')] class extends Component {
             'status' => EnrollmentStatus::Completed,
             'completed_at' => now(),
         ]);
+
+        User::find($enrollment->user_id)->notify(new EnrollmentStatusChanged($enrollment, EnrollmentStatus::Completed));
     }
 
     private function voidInvoiceIfUnpaid(Enrollment $enrollment): void
