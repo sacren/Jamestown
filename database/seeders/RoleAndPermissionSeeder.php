@@ -64,6 +64,7 @@ class RoleAndPermissionSeeder extends Seeder
                 'payments.create',
                 'certificates.view-any',
                 'certificates.manage',
+                'manage-announcements',
             ]);
 
         SpatieRole::findOrCreate(Role::Instructor->value)
