@@ -74,6 +74,11 @@ class User extends Authenticatable
         return $this->hasMany(Certificate::class);
     }
 
+    public function announcements(): HasMany
+    {
+        return $this->hasMany(Announcement::class, 'author_id');
+    }
+
     public function studentProfile(): HasOne
     {
         return $this->hasOne(StudentProfile::class);
