@@ -2,6 +2,9 @@
 
 use App\Enums\AnnouncementAudience;
 use App\Models\Announcement;
+use App\Models\User;
+use App\Notifications\NewAnnouncement;
+use Illuminate\Support\Facades\Notification;
 use Livewire\Attributes\Title;
 use Livewire\Component;
 
@@ -48,12 +51,18 @@ new #[Title('Edit Announcement')] class extends Component {
             'audience' => ['required', 'in:all,students,instructors'],
         ]);
 
+        $shouldNotify = $this->announcement->notified_at === null;
+
         $this->announcement->update([
             'title' => $this->title,
             'body' => $this->body,
             'audience' => $this->audience,
             'published_at' => now(),
         ]);
+
+        if ($shouldNotify) {
+            $this->dispatchAnnouncementNotifications($this->announcement);
+        }
 
         session()->flash('status', __('Announcement published.'));
 
@@ -67,6 +76,20 @@ new #[Title('Edit Announcement')] class extends Component {
         session()->flash('status', __('Announcement unpublished.'));
 
         $this->redirect(route('admin.announcements.index'), navigate: true);
+    }
+
+    private function dispatchAnnouncementNotifications(Announcement $announcement): void
+    {
+        $audience = AnnouncementAudience::from($announcement->audience->value);
+
+        $users = match ($audience) {
+            AnnouncementAudience::All => User::role(['student', 'instructor'])->get(),
+            AnnouncementAudience::Students => User::role('student')->get(),
+            AnnouncementAudience::Instructors => User::role('instructor')->get(),
+        };
+
+        Notification::send($users, new NewAnnouncement($announcement));
+        $announcement->update(['notified_at' => now()]);
     }
 }; ?>
 
