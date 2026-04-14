@@ -2,8 +2,11 @@
 
 use App\Concerns\GradeValidationRules;
 use App\Models\Assessment;
+use App\Models\Enrollment;
 use App\Models\Grade;
 use App\Models\Section;
+use App\Models\User;
+use App\Notifications\GradePosted;
 use Livewire\Attributes\Title;
 use Livewire\Component;
 
@@ -83,6 +86,8 @@ new #[Title('Manage Grades')] class extends Component {
             return;
         }
 
+        $notifiedStudentIds = [];
+
         foreach ($this->grades as $enrollmentId => $data) {
             if ($data['score'] === '' || $data['score'] === null) {
                 continue;
@@ -99,6 +104,12 @@ new #[Title('Manage Grades')] class extends Component {
                     'graded_by' => auth()->id(),
                 ],
             );
+
+            $enrollment = Enrollment::find($enrollmentId);
+            if ($enrollment && ! in_array($enrollment->user_id, $notifiedStudentIds)) {
+                User::find($enrollment->user_id)->notify(new GradePosted($enrollment, $assessment));
+                $notifiedStudentIds[] = $enrollment->user_id;
+            }
         }
 
         session()->flash('status', __('Grades saved.'));
