@@ -5,6 +5,7 @@ use App\Actions\Documents\IssueCertificate;
 use App\Models\Enrollment;
 use App\Models\Program;
 use App\Models\User;
+use App\Notifications\CertificateIssued;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Title;
 use Livewire\Component;
@@ -78,6 +79,7 @@ new #[Title('Issue Certificate')] class extends Component {
 
         try {
             $certificate = app(IssueCertificate::class)->handle($student, $program, auth()->user());
+            $student->notify(new CertificateIssued($certificate));
             $this->redirect(route('admin.certificates.show', $certificate), navigate: true);
         } catch (\InvalidArgumentException $e) {
             $this->addError('program_id', $e->getMessage());
