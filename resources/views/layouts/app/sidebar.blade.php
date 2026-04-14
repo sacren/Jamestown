@@ -122,6 +122,12 @@
                         {{ __('Certificates') }}
                     </flux:sidebar.item>
                     @endcan
+
+                    @can('manage-announcements')
+                    <flux:sidebar.item icon="megaphone" :href="route('admin.announcements.index')" :current="request()->routeIs('admin.announcements.*')" wire:navigate>
+                        {{ __('Announcements') }}
+                    </flux:sidebar.item>
+                    @endcan
                 </flux:sidebar.group>
                 @endrole
             </flux:sidebar.nav>
