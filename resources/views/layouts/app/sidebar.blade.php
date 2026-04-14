@@ -135,7 +135,7 @@
             <flux:spacer />
 
             <div class="hidden items-center gap-2 lg:flex">
-                <x-notification-bell />
+                <livewire:notification-bell />
                 <x-desktop-user-menu :name="auth()->user()->name" />
             </div>
         </flux:sidebar>
@@ -146,7 +146,7 @@
 
             <flux:spacer />
 
-            <x-notification-bell />
+            <livewire:notification-bell />
 
             <flux:dropdown position="top" align="end">
                 <flux:profile
