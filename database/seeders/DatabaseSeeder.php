@@ -55,6 +55,7 @@ class DatabaseSeeder extends Seeder
             GradeSeeder::class,
             PaymentSeeder::class,
             CertificateSeeder::class,
+            AnnouncementSeeder::class,
         ]);
     }
 }
