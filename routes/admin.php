@@ -72,4 +72,11 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
         Route::livewire('certificates/issue', 'pages::admin.certificates.issue')->name('certificates.issue');
         Route::livewire('certificates/{certificate}', 'pages::admin.certificates.show')->name('certificates.show');
     });
+
+    // Announcements
+    Route::middleware('permission:manage-announcements')->group(function () {
+        Route::livewire('announcements', 'pages::admin.announcements.index')->name('announcements.index');
+        Route::livewire('announcements/create', 'pages::admin.announcements.create')->name('announcements.create');
+        Route::livewire('announcements/{announcement}', 'pages::admin.announcements.edit')->name('announcements.edit');
+    });
 });
