@@ -2,6 +2,9 @@
 
 use App\Enums\AnnouncementAudience;
 use App\Models\Announcement;
+use App\Models\User;
+use App\Notifications\NewAnnouncement;
+use Illuminate\Support\Facades\Notification;
 use Livewire\Attributes\Title;
 use Livewire\Component;
 
@@ -23,7 +26,7 @@ new #[Title('New Announcement')] class extends Component {
             'audience' => ['required', 'in:all,students,instructors'],
         ]);
 
-        Announcement::create([
+        $announcement = Announcement::create([
             'title' => $this->title,
             'body' => $this->body,
             'audience' => $this->audience,
@@ -31,9 +34,26 @@ new #[Title('New Announcement')] class extends Component {
             'author_id' => auth()->id(),
         ]);
 
+        if ($publish) {
+            $this->dispatchAnnouncementNotifications($announcement);
+        }
+
         session()->flash('status', $publish ? __('Announcement published.') : __('Announcement saved as draft.'));
 
         $this->redirect(route('admin.announcements.index'), navigate: true);
+    }
+    private function dispatchAnnouncementNotifications(Announcement $announcement): void
+    {
+        $audience = AnnouncementAudience::from($announcement->audience->value);
+
+        $users = match ($audience) {
+            AnnouncementAudience::All => User::role(['student', 'instructor'])->get(),
+            AnnouncementAudience::Students => User::role('student')->get(),
+            AnnouncementAudience::Instructors => User::role('instructor')->get(),
+        };
+
+        Notification::send($users, new NewAnnouncement($announcement));
+        $announcement->update(['notified_at' => now()]);
     }
 }; ?>
 
