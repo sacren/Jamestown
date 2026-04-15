@@ -79,4 +79,14 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
         Route::livewire('announcements/create', 'pages::admin.announcements.create')->name('announcements.create');
         Route::livewire('announcements/{announcement}', 'pages::admin.announcements.edit')->name('announcements.edit');
     });
+
+    // Reports
+    Route::middleware('permission:view-reports')->group(function () {
+        Route::livewire('reports', 'pages::admin.reports.index')->name('reports.index');
+        Route::livewire('reports/enrollment', 'pages::admin.reports.enrollment')->name('reports.enrollment');
+        Route::livewire('reports/attendance', 'pages::admin.reports.attendance')->name('reports.attendance');
+        Route::livewire('reports/grades', 'pages::admin.reports.grades')->name('reports.grades');
+        Route::livewire('reports/financial', 'pages::admin.reports.financial')->name('reports.financial');
+        Route::livewire('reports/program-completion', 'pages::admin.reports.program-completion')->name('reports.program-completion');
+    });
 });
