@@ -55,6 +55,38 @@ class EnrollmentSeeder extends Seeder
                     'enrolled_at' => now()->subMonths(6),
                 ]);
             }
+
+            // Dropped enrollment for HVAC-101
+            $hvac101Section = Section::query()
+                ->whereHas('course', fn ($q) => $q->where('code', 'HVAC-101'))
+                ->where('term_id', $fallTerm->id)
+                ->first();
+
+            if ($hvac101Section) {
+                Enrollment::create([
+                    'user_id' => $testUser->id,
+                    'section_id' => $hvac101Section->id,
+                    'status' => EnrollmentStatus::Dropped,
+                    'enrolled_at' => now()->subWeeks(4),
+                    'dropped_at' => now()->subWeeks(2),
+                ]);
+            }
+
+            // Withdrawn enrollment for PLMB-101
+            $plmb101Section = Section::query()
+                ->whereHas('course', fn ($q) => $q->where('code', 'PLMB-101'))
+                ->where('term_id', $fallTerm->id)
+                ->first();
+
+            if ($plmb101Section) {
+                Enrollment::create([
+                    'user_id' => $testUser->id,
+                    'section_id' => $plmb101Section->id,
+                    'status' => EnrollmentStatus::Withdrawn,
+                    'enrolled_at' => now()->subWeeks(3),
+                    'dropped_at' => now()->subWeek(),
+                ]);
+            }
         }
     }
 
