@@ -128,6 +128,12 @@
                         {{ __('Announcements') }}
                     </flux:sidebar.item>
                     @endcan
+
+                    @can('view-reports')
+                    <flux:sidebar.item icon="chart-bar-square" :href="route('admin.reports.index')" :current="request()->routeIs('admin.reports.*')" wire:navigate>
+                        {{ __('Reports') }}
+                    </flux:sidebar.item>
+                    @endcan
                 </flux:sidebar.group>
                 @endrole
             </flux:sidebar.nav>
