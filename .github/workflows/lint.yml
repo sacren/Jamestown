@@ -4,9 +4,11 @@ on:
   push:
     branches:
       - main
+      - 13.x-livewire-8034
   pull_request:
     branches:
       - main
+      - 13.x-livewire-8034
 
 permissions:
   contents: read
