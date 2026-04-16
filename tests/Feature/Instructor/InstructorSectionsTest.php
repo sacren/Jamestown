@@ -27,9 +27,11 @@ test('instructor only sees their own sections', function () {
 
     $this->actingAs($instructor);
 
-    Livewire::test('pages::instructor.sections')
-        ->assertSee('01')
-        ->assertDontSee('99');
+    $component = Livewire::test('pages::instructor.sections');
+
+    $sectionNumbers = $component->instance()->sections->pluck('section_number')->toArray();
+    expect($sectionNumbers)->toContain('01');
+    expect($sectionNumbers)->not->toContain('99');
 });
 
 test('instructor can filter sections by term', function () {
