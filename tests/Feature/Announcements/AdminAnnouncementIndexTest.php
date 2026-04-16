@@ -1,6 +1,5 @@
 <?php
 
-use App\Enums\AnnouncementAudience;
 use App\Models\Announcement;
 use App\Models\User;
 use Database\Seeders\RoleAndPermissionSeeder;

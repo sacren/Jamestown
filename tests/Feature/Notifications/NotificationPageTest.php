@@ -3,6 +3,7 @@
 use App\Models\User;
 use Database\Seeders\RoleAndPermissionSeeder;
 use Illuminate\Notifications\DatabaseNotification;
+use Illuminate\Support\Str;
 use Livewire\Livewire;
 
 beforeEach(function () {
@@ -26,7 +27,7 @@ test('page shows notification title and message', function () {
     $user = User::factory()->asStudent()->create();
 
     DatabaseNotification::create([
-        'id' => \Illuminate\Support\Str::uuid(),
+        'id' => Str::uuid(),
         'type' => 'App\Notifications\GradePosted',
         'notifiable_type' => User::class,
         'notifiable_id' => $user->id,
@@ -43,7 +44,7 @@ test('mark individual notification as read sets read_at', function () {
     $user = User::factory()->asStudent()->create();
 
     $notification = DatabaseNotification::create([
-        'id' => \Illuminate\Support\Str::uuid(),
+        'id' => Str::uuid(),
         'type' => 'App\Notifications\GradePosted',
         'notifiable_type' => User::class,
         'notifiable_id' => $user->id,
@@ -63,7 +64,7 @@ test('mark all as read sets read_at on all unread', function () {
 
     for ($i = 0; $i < 3; $i++) {
         DatabaseNotification::create([
-            'id' => \Illuminate\Support\Str::uuid(),
+            'id' => Str::uuid(),
             'type' => 'App\Notifications\GradePosted',
             'notifiable_type' => User::class,
             'notifiable_id' => $user->id,
@@ -82,7 +83,7 @@ test('read notifications are still visible', function () {
     $user = User::factory()->asStudent()->create();
 
     DatabaseNotification::create([
-        'id' => \Illuminate\Support\Str::uuid(),
+        'id' => Str::uuid(),
         'type' => 'App\Notifications\GradePosted',
         'notifiable_type' => User::class,
         'notifiable_id' => $user->id,
@@ -100,7 +101,7 @@ test('pagination works with many notifications', function () {
 
     for ($i = 0; $i < 25; $i++) {
         DatabaseNotification::create([
-            'id' => \Illuminate\Support\Str::uuid(),
+            'id' => Str::uuid(),
             'type' => 'App\Notifications\GradePosted',
             'notifiable_type' => User::class,
             'notifiable_id' => $user->id,

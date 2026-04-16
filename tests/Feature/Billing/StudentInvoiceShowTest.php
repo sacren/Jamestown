@@ -2,6 +2,7 @@
 
 use App\Models\Enrollment;
 use App\Models\Invoice;
+use App\Models\Payment;
 use App\Models\User;
 use Database\Seeders\RoleAndPermissionSeeder;
 
@@ -50,7 +51,7 @@ test('student show page does not render payment delete actions', function () {
     $student = User::factory()->asStudent()->create();
     $enrollment = Enrollment::factory()->forStudent($student)->create();
     $invoice = Invoice::factory()->forEnrollment($enrollment)->create(['amount_due' => 500]);
-    \App\Models\Payment::factory()->forInvoice($invoice)->create(['amount' => 200]);
+    Payment::factory()->forInvoice($invoice)->create(['amount' => 200]);
 
     $response = $this->actingAs($student)
         ->get(route('registration.invoices.show', $invoice))

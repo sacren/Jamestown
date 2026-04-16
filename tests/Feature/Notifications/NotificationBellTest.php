@@ -3,6 +3,7 @@
 use App\Models\User;
 use Database\Seeders\RoleAndPermissionSeeder;
 use Illuminate\Notifications\DatabaseNotification;
+use Illuminate\Support\Str;
 use Livewire\Livewire;
 
 beforeEach(function () {
@@ -14,7 +15,7 @@ test('bell shows unread count when notifications exist', function () {
 
     for ($i = 0; $i < 3; $i++) {
         DatabaseNotification::create([
-            'id' => \Illuminate\Support\Str::uuid(),
+            'id' => Str::uuid(),
             'type' => 'App\Notifications\GradePosted',
             'notifiable_type' => User::class,
             'notifiable_id' => $user->id,
@@ -49,7 +50,7 @@ test('bell count reflects only unread notifications', function () {
     $user = User::factory()->asStudent()->create();
 
     DatabaseNotification::create([
-        'id' => \Illuminate\Support\Str::uuid(),
+        'id' => Str::uuid(),
         'type' => 'App\Notifications\GradePosted',
         'notifiable_type' => User::class,
         'notifiable_id' => $user->id,
@@ -57,7 +58,7 @@ test('bell count reflects only unread notifications', function () {
     ]);
 
     DatabaseNotification::create([
-        'id' => \Illuminate\Support\Str::uuid(),
+        'id' => Str::uuid(),
         'type' => 'App\Notifications\GradePosted',
         'notifiable_type' => User::class,
         'notifiable_id' => $user->id,

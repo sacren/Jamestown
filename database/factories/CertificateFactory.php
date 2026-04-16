@@ -2,7 +2,6 @@
 
 namespace Database\Factories;
 
-use App\Actions\Documents\GenerateCertificateNumber;
 use App\Models\Certificate;
 use App\Models\Program;
 use App\Models\User;

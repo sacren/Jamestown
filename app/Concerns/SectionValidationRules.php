@@ -3,6 +3,7 @@
 namespace App\Concerns;
 
 use App\Enums\DayOfWeek;
+use Illuminate\Contracts\Validation\Rule;
 use Illuminate\Validation\Rules\Enum;
 
 trait SectionValidationRules
@@ -10,7 +11,7 @@ trait SectionValidationRules
     /**
      * Get the validation rules for creating a section.
      *
-     * @return array<string, array<int, \Illuminate\Contracts\Validation\Rule|array<mixed>|string>>
+     * @return array<string, array<int, Rule|array<mixed>|string>>
      */
     protected function sectionCreateRules(): array
     {
@@ -32,7 +33,7 @@ trait SectionValidationRules
     /**
      * Get the validation rules for updating a section.
      *
-     * @return array<string, array<int, \Illuminate\Contracts\Validation\Rule|array<mixed>|string>>
+     * @return array<string, array<int, Rule|array<mixed>|string>>
      */
     protected function sectionUpdateRules(int $sectionId): array
     {

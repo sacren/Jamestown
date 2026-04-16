@@ -3,7 +3,6 @@
 use App\Enums\EnrollmentStatus;
 use App\Models\Announcement;
 use App\Models\Assessment;
-use App\Models\Certificate;
 use App\Models\Course;
 use App\Models\Enrollment;
 use App\Models\Program;

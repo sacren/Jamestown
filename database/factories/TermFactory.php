@@ -27,8 +27,8 @@ class TermFactory extends Factory
         };
 
         return [
-            'name' => $semester . ' ' . $year,
-            'code' => $code . $year . fake()->unique()->numerify('##'),
+            'name' => $semester.' '.$year,
+            'code' => $code.$year.fake()->unique()->numerify('##'),
             'start_date' => $startDate,
             'end_date' => $startDate->copy()->addWeeks(16),
             'registration_start' => $startDate->copy()->subWeeks(4),

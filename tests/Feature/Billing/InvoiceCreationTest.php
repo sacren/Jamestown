@@ -1,13 +1,15 @@
 <?php
 
 use App\Actions\Billing\CreateInvoiceForEnrollment;
-use App\Enums\EnrollmentStatus;
 use App\Models\Course;
 use App\Models\Enrollment;
 use App\Models\Invoice;
+use App\Models\Payment;
 use App\Models\Section;
 use App\Models\Term;
+use App\Models\User;
 use Database\Seeders\RoleAndPermissionSeeder;
+use Livewire\Livewire;
 
 beforeEach(function () {
     $this->seed(RoleAndPermissionSeeder::class);
@@ -90,7 +92,7 @@ test('due_at matches term start date', function () {
 });
 
 test('invoice is auto-created when a student enrolls via registration page', function () {
-    $student = \App\Models\User::factory()->asStudent()->create();
+    $student = User::factory()->asStudent()->create();
     $course = Course::factory()->create(['tuition_amount' => 600]);
     $term = Term::factory()->create([
         'registration_start' => now()->subDay(),
@@ -105,7 +107,7 @@ test('invoice is auto-created when a student enrolls via registration page', fun
 
     $this->actingAs($student);
 
-    \Livewire\Livewire::test('pages::registration.sections')
+    Livewire::test('pages::registration.sections')
         ->call('enroll', $section->id);
 
     $enrollment = Enrollment::where('user_id', $student->id)->first();
@@ -115,7 +117,7 @@ test('invoice is auto-created when a student enrolls via registration page', fun
 });
 
 test('dropping an enrollment with zero payments voids its invoice', function () {
-    $student = \App\Models\User::factory()->asStudent()->create();
+    $student = User::factory()->asStudent()->create();
     $term = Term::factory()->create([
         'registration_start' => now()->subDay(),
         'registration_end' => now()->addDays(7),
@@ -129,14 +131,14 @@ test('dropping an enrollment with zero payments voids its invoice', function () 
 
     $this->actingAs($student);
 
-    \Livewire\Livewire::test('pages::registration.schedule')
+    Livewire::test('pages::registration.schedule')
         ->call('dropEnrollment', $enrollment->id);
 
     expect($invoice->fresh()->isVoided())->toBeTrue();
 });
 
 test('dropping an enrollment with payments does not void its invoice', function () {
-    $student = \App\Models\User::factory()->asStudent()->create();
+    $student = User::factory()->asStudent()->create();
     $term = Term::factory()->create([
         'registration_start' => now()->subDay(),
         'registration_end' => now()->addDays(7),
@@ -147,11 +149,11 @@ test('dropping an enrollment with payments does not void its invoice', function 
         ->forSection($section)
         ->create();
     $invoice = Invoice::factory()->forEnrollment($enrollment)->create(['amount_due' => 500]);
-    \App\Models\Payment::factory()->forInvoice($invoice)->create(['amount' => 250]);
+    Payment::factory()->forInvoice($invoice)->create(['amount' => 250]);
 
     $this->actingAs($student);
 
-    \Livewire\Livewire::test('pages::registration.schedule')
+    Livewire::test('pages::registration.schedule')
         ->call('dropEnrollment', $enrollment->id);
 
     expect($invoice->fresh()->isVoided())->toBeFalse();

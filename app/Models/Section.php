@@ -61,7 +61,7 @@ class Section extends Model
 
     public function displayCode(): string
     {
-        return $this->course->code . '-' . $this->section_number;
+        return $this->course->code.'-'.$this->section_number;
     }
 
     public function scheduleSummary(): string
@@ -76,11 +76,11 @@ class Section extends Model
         ];
 
         return $this->schedules
-            ->groupBy(fn ($s) => $s->start_time . '-' . $s->end_time)
+            ->groupBy(fn ($s) => $s->start_time.'-'.$s->end_time)
             ->map(function ($group, $time) use ($dayAbbrev) {
                 $days = $group->map(fn ($s) => $dayAbbrev[$s->day_of_week->value] ?? $s->day_of_week->value)->implode('/');
 
-                return $days . ' ' . $time;
+                return $days.' '.$time;
             })
             ->implode(', ');
     }
