@@ -148,3 +148,14 @@ test('home featured section shows empty state when no active programs exist', fu
 
     $response->assertSee(__('New programs coming soon.'), escape: false);
 });
+
+test('home renders the three enrollment steps in order', function () {
+    $response = $this->get(route('home'));
+
+    $response->assertSeeInOrder([
+        __('How enrollment works'),
+        __('Browse programs'),
+        __('Apply online'),
+        __('Start learning'),
+    ], escape: false);
+});
