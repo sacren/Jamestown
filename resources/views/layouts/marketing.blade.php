@@ -10,6 +10,8 @@
             {{ $slot }}
         </main>
 
+        <x-marketing.footer />
+
         @fluxScripts
     </body>
 </html>
