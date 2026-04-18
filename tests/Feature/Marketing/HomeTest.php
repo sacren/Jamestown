@@ -1,5 +1,8 @@
 <?php
 
+use App\Models\Course;
+use App\Models\Program;
+use App\Models\Term;
 use App\Models\User;
 
 test('home page responds with 200 for guests', function () {
@@ -51,4 +54,58 @@ test('home page sets the meta description', function () {
     $response = $this->get(route('home'));
 
     $response->assertSee('<meta name="description"', escape: false);
+});
+
+test('home stats strip counts active programs and active courses only', function () {
+    Program::factory()->count(3)->create(['is_active' => true]);
+    Program::factory()->count(2)->create(['is_active' => false]);
+    $program = Program::factory()->create(['is_active' => true]);
+    Course::factory()->count(5)->forProgram($program)->create(['is_active' => true]);
+    Course::factory()->count(2)->forProgram($program)->create(['is_active' => false]);
+
+    $response = $this->get(route('home'));
+
+    $response
+        ->assertSeeInOrder(['Programs', '4'], escape: false)
+        ->assertSeeInOrder(['Courses', '5'], escape: false);
+});
+
+test('home stats strip shows current term name when today falls inside an active term', function () {
+    Term::factory()->create([
+        'name' => 'Spring 2026',
+        'start_date' => today()->subWeeks(2),
+        'end_date' => today()->addWeeks(10),
+        'is_active' => true,
+    ]);
+
+    $response = $this->get(route('home'));
+
+    $response->assertSee('Spring 2026', escape: false);
+});
+
+test('home stats strip falls back to rolling enrollment when no active term matches today', function () {
+    $response = $this->get(route('home'));
+
+    $response->assertSee(__('Rolling enrollment'), escape: false);
+});
+
+test('home stats strip prefers the next upcoming active term when no term covers today', function () {
+    Term::factory()->create([
+        'name' => 'Past Term',
+        'start_date' => today()->subMonths(6),
+        'end_date' => today()->subMonths(2),
+        'is_active' => true,
+    ]);
+    Term::factory()->create([
+        'name' => 'Future Term',
+        'start_date' => today()->addWeeks(4),
+        'end_date' => today()->addMonths(4),
+        'is_active' => true,
+    ]);
+
+    $response = $this->get(route('home'));
+
+    $response
+        ->assertSee('Future Term', escape: false)
+        ->assertDontSee('Past Term', escape: false);
 });
