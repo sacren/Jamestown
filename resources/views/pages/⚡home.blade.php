@@ -39,6 +39,18 @@ new #[Layout('layouts::marketing', [
                 ->orderBy('start_date')
                 ->first();
     }
+
+    #[Computed]
+    public function featuredPrograms()
+    {
+        return Program::query()
+            ->where('is_active', true)
+            ->withCount('activeCourses')
+            ->orderByDesc('active_courses_count')
+            ->orderBy('name')
+            ->limit(3)
+            ->get();
+    }
 }; ?>
 
 <div>
@@ -67,7 +79,7 @@ new #[Layout('layouts::marketing', [
         </div>
     </section>
 
-    <x-marketing.section aria-label="{{ __('Program statistics') }}">
+    <x-marketing.section aria-label="{{ __('Program statistics') }}" class="!py-10">
         <dl class="grid grid-cols-1 gap-8 text-center sm:grid-cols-3">
             <div>
                 <dt class="text-sm font-medium uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
@@ -94,5 +106,24 @@ new #[Layout('layouts::marketing', [
                 </dd>
             </div>
         </dl>
+    </x-marketing.section>
+
+    <x-marketing.section
+        id="featured"
+        :eyebrow="__('Explore')"
+        :heading="__('Featured programs')"
+        :description="__('A look at some of the programs our students are building careers with.')"
+    >
+        @if ($this->featuredPrograms->isEmpty())
+            <p class="text-center text-zinc-500 dark:text-zinc-400">
+                {{ __('New programs coming soon.') }}
+            </p>
+        @else
+            <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                @foreach ($this->featuredPrograms as $program)
+                    <x-marketing.program-card :program="$program" />
+                @endforeach
+            </div>
+        @endif
     </x-marketing.section>
 </div>
