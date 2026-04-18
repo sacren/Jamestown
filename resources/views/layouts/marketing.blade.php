@@ -4,6 +4,8 @@
         @include('partials.head')
     </head>
     <body class="min-h-screen bg-white antialiased dark:bg-neutral-900">
+        <x-marketing.nav />
+
         <main>
             {{ $slot }}
         </main>
