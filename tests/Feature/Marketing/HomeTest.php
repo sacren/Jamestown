@@ -109,3 +109,42 @@ test('home stats strip prefers the next upcoming active term when no term covers
         ->assertSee('Future Term', escape: false)
         ->assertDontSee('Past Term', escape: false);
 });
+
+test('home featured section renders up to three active programs', function () {
+    Program::factory()->count(5)->create(['is_active' => true]);
+
+    $response = $this->get(route('home'));
+
+    expect(substr_count($response->getContent(), 'wire:key="program-card-'))->toBe(3);
+});
+
+test('home featured section excludes inactive programs', function () {
+    Program::factory()->create(['name' => 'Active Program', 'is_active' => true]);
+    Program::factory()->create(['name' => 'Hidden Program', 'is_active' => false]);
+
+    $response = $this->get(route('home'));
+
+    $response
+        ->assertSee('Active Program')
+        ->assertDontSee('Hidden Program');
+});
+
+test('home featured section orders programs by active course count then name', function () {
+    $few = Program::factory()->create(['name' => 'Alpha Program', 'is_active' => true]);
+    $many = Program::factory()->create(['name' => 'Zulu Program', 'is_active' => true]);
+
+    Course::factory()->count(1)->forProgram($few)->create(['is_active' => true]);
+    Course::factory()->count(4)->forProgram($many)->create(['is_active' => true]);
+
+    $response = $this->get(route('home'));
+
+    $response->assertSeeInOrder(['Zulu Program', 'Alpha Program'], escape: false);
+});
+
+test('home featured section shows empty state when no active programs exist', function () {
+    Program::factory()->create(['is_active' => false]);
+
+    $response = $this->get(route('home'));
+
+    $response->assertSee(__('New programs coming soon.'), escape: false);
+});
