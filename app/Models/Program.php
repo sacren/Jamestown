@@ -2,13 +2,16 @@
 
 namespace App\Models;
 
+use App\Observers\ProgramObserver;
 use Database\Factories\ProgramFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 #[Fillable(['name', 'code', 'description', 'duration_weeks', 'total_credits_required', 'tuition_cost', 'is_active'])]
+#[ObservedBy([ProgramObserver::class])]
 class Program extends Model
 {
     /** @use HasFactory<ProgramFactory> */

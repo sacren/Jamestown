@@ -3,6 +3,7 @@
 use App\Models\Course;
 use App\Models\Program;
 use App\Models\Term;
+use Illuminate\Support\Facades\Cache;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
@@ -10,46 +11,62 @@ use Livewire\Component;
 new #[Layout('layouts::marketing', [
     'description' => 'Hands-on trade training that builds careers — taught by working professionals at Empire Trade School.',
 ])] class extends Component {
+    private const CACHE_TTL_SECONDS = 600;
+
     #[Computed]
     public function programCount(): int
     {
-        return Program::query()->where('is_active', true)->count();
+        return Cache::remember(
+            'home.program-count',
+            self::CACHE_TTL_SECONDS,
+            fn () => Program::query()->where('is_active', true)->count(),
+        );
     }
 
     #[Computed]
     public function courseCount(): int
     {
-        return Course::query()->where('is_active', true)->count();
+        return Cache::remember(
+            'home.course-count',
+            self::CACHE_TTL_SECONDS,
+            fn () => Course::query()->where('is_active', true)->count(),
+        );
     }
 
     #[Computed]
     public function currentTerm(): ?Term
     {
-        $today = today();
+        return Cache::remember('home.current-term', self::CACHE_TTL_SECONDS, function () {
+            $today = today();
 
-        return Term::query()
-            ->where('is_active', true)
-            ->where('start_date', '<=', $today)
-            ->where('end_date', '>=', $today)
-            ->orderBy('start_date', 'desc')
-            ->first()
-            ?? Term::query()
+            return Term::query()
                 ->where('is_active', true)
-                ->where('start_date', '>', $today)
-                ->orderBy('start_date')
-                ->first();
+                ->where('start_date', '<=', $today)
+                ->where('end_date', '>=', $today)
+                ->orderBy('start_date', 'desc')
+                ->first()
+                ?? Term::query()
+                    ->where('is_active', true)
+                    ->where('start_date', '>', $today)
+                    ->orderBy('start_date')
+                    ->first();
+        });
     }
 
     #[Computed]
     public function featuredPrograms()
     {
-        return Program::query()
-            ->where('is_active', true)
-            ->withCount('activeCourses')
-            ->orderByDesc('active_courses_count')
-            ->orderBy('name')
-            ->limit(3)
-            ->get();
+        return Cache::remember(
+            'home.featured-programs',
+            self::CACHE_TTL_SECONDS,
+            fn () => Program::query()
+                ->where('is_active', true)
+                ->withCount('activeCourses')
+                ->orderByDesc('active_courses_count')
+                ->orderBy('name')
+                ->limit(3)
+                ->get(),
+        );
     }
 }; ?>
 

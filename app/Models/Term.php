@@ -2,13 +2,16 @@
 
 namespace App\Models;
 
+use App\Observers\TermObserver;
 use Database\Factories\TermFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 #[Fillable(['name', 'code', 'start_date', 'end_date', 'registration_start', 'registration_end', 'is_active'])]
+#[ObservedBy([TermObserver::class])]
 class Term extends Model
 {
     /** @use HasFactory<TermFactory> */
