@@ -176,4 +176,41 @@ new #[Layout('layouts::marketing', [
             </li>
         </ol>
     </x-marketing.section>
+
+    <x-marketing.section
+        id="who-its-for"
+        :eyebrow="__('Built for')"
+        :heading="__('Who it\'s for')"
+        :description="__('One platform, three roles, shared success.')"
+    >
+        <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            <div class="rounded-lg border border-zinc-200 p-6 dark:border-zinc-700">
+                <flux:icon name="academic-cap" class="size-8 text-zinc-900 dark:text-white" />
+                <h3 class="mt-4 text-lg font-semibold text-zinc-900 dark:text-white">
+                    {{ __('Students') }}
+                </h3>
+                <p class="mt-2 text-zinc-600 dark:text-zinc-400">
+                    {{ __('Browse programs, apply online, and track your progress from enrollment to credential.') }}
+                </p>
+            </div>
+            <div class="rounded-lg border border-zinc-200 p-6 dark:border-zinc-700">
+                <flux:icon name="user-group" class="size-8 text-zinc-900 dark:text-white" />
+                <h3 class="mt-4 text-lg font-semibold text-zinc-900 dark:text-white">
+                    {{ __('Instructors') }}
+                </h3>
+                <p class="mt-2 text-zinc-600 dark:text-zinc-400">
+                    {{ __('Manage sections, take attendance, and grade your students in one place.') }}
+                </p>
+            </div>
+            <div class="rounded-lg border border-zinc-200 p-6 dark:border-zinc-700">
+                <flux:icon name="briefcase" class="size-8 text-zinc-900 dark:text-white" />
+                <h3 class="mt-4 text-lg font-semibold text-zinc-900 dark:text-white">
+                    {{ __('Administrators') }}
+                </h3>
+                <p class="mt-2 text-zinc-600 dark:text-zinc-400">
+                    {{ __('Run programs, enrollment, and billing with reports that keep the whole school aligned.') }}
+                </p>
+            </div>
+        </div>
+    </x-marketing.section>
 </div>
