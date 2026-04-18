@@ -159,3 +159,14 @@ test('home renders the three enrollment steps in order', function () {
         __('Start learning'),
     ], escape: false);
 });
+
+test('home renders role tiles for students, instructors, and administrators', function () {
+    $response = $this->get(route('home'));
+
+    $response->assertSeeInOrder([
+        __("Who it's for"),
+        __('Students'),
+        __('Instructors'),
+        __('Administrators'),
+    ], escape: false);
+});
