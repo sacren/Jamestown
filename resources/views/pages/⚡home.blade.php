@@ -1,11 +1,45 @@
 <?php
 
+use App\Models\Course;
+use App\Models\Program;
+use App\Models\Term;
+use Livewire\Attributes\Computed;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 
 new #[Layout('layouts::marketing', [
     'description' => 'Hands-on trade training that builds careers — taught by working professionals at Empire Trade School.',
-])] class extends Component {}; ?>
+])] class extends Component {
+    #[Computed]
+    public function programCount(): int
+    {
+        return Program::query()->where('is_active', true)->count();
+    }
+
+    #[Computed]
+    public function courseCount(): int
+    {
+        return Course::query()->where('is_active', true)->count();
+    }
+
+    #[Computed]
+    public function currentTerm(): ?Term
+    {
+        $today = today();
+
+        return Term::query()
+            ->where('is_active', true)
+            ->where('start_date', '<=', $today)
+            ->where('end_date', '>=', $today)
+            ->orderBy('start_date', 'desc')
+            ->first()
+            ?? Term::query()
+                ->where('is_active', true)
+                ->where('start_date', '>', $today)
+                ->orderBy('start_date')
+                ->first();
+    }
+}; ?>
 
 <div>
     <section class="relative isolate overflow-hidden bg-gradient-to-b from-white to-zinc-50 py-20 sm:py-28 lg:py-32 dark:from-zinc-900 dark:to-zinc-950">
@@ -32,4 +66,33 @@ new #[Layout('layouts::marketing', [
             </div>
         </div>
     </section>
+
+    <x-marketing.section aria-label="{{ __('Program statistics') }}">
+        <dl class="grid grid-cols-1 gap-8 text-center sm:grid-cols-3">
+            <div>
+                <dt class="text-sm font-medium uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
+                    {{ __('Programs') }}
+                </dt>
+                <dd class="mt-2 text-4xl font-bold text-zinc-900 dark:text-white">
+                    {{ $this->programCount }}
+                </dd>
+            </div>
+            <div>
+                <dt class="text-sm font-medium uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
+                    {{ __('Courses') }}
+                </dt>
+                <dd class="mt-2 text-4xl font-bold text-zinc-900 dark:text-white">
+                    {{ $this->courseCount }}
+                </dd>
+            </div>
+            <div>
+                <dt class="text-sm font-medium uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
+                    {{ __('Current term') }}
+                </dt>
+                <dd class="mt-2 text-2xl font-bold text-zinc-900 dark:text-white sm:text-3xl">
+                    {{ $this->currentTerm?->name ?? __('Rolling enrollment') }}
+                </dd>
+            </div>
+        </dl>
+    </x-marketing.section>
 </div>
