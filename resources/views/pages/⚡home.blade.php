@@ -139,4 +139,41 @@ new #[Layout('layouts::marketing', [
             </div>
         @endif
     </x-marketing.section>
+
+    <x-marketing.section
+        id="how-it-works"
+        :eyebrow="__('Next steps')"
+        :heading="__('How enrollment works')"
+        :description="__('Three steps from curious to enrolled.')"
+    >
+        <ol class="grid gap-8 sm:grid-cols-3">
+            <li class="flex flex-col items-center text-center">
+                <span class="flex h-12 w-12 items-center justify-center rounded-full bg-zinc-900 text-lg font-bold text-white dark:bg-white dark:text-zinc-900" aria-hidden="true">1</span>
+                <h3 class="mt-4 text-lg font-semibold text-zinc-900 dark:text-white">
+                    {{ __('Browse programs') }}
+                </h3>
+                <p class="mt-2 text-zinc-600 dark:text-zinc-400">
+                    {{ __('Explore our trade programs and pick one that fits your goals.') }}
+                </p>
+            </li>
+            <li class="flex flex-col items-center text-center">
+                <span class="flex h-12 w-12 items-center justify-center rounded-full bg-zinc-900 text-lg font-bold text-white dark:bg-white dark:text-zinc-900" aria-hidden="true">2</span>
+                <h3 class="mt-4 text-lg font-semibold text-zinc-900 dark:text-white">
+                    {{ __('Apply online') }}
+                </h3>
+                <p class="mt-2 text-zinc-600 dark:text-zinc-400">
+                    {{ __('Create an account and submit your application in minutes.') }}
+                </p>
+            </li>
+            <li class="flex flex-col items-center text-center">
+                <span class="flex h-12 w-12 items-center justify-center rounded-full bg-zinc-900 text-lg font-bold text-white dark:bg-white dark:text-zinc-900" aria-hidden="true">3</span>
+                <h3 class="mt-4 text-lg font-semibold text-zinc-900 dark:text-white">
+                    {{ __('Start learning') }}
+                </h3>
+                <p class="mt-2 text-zinc-600 dark:text-zinc-400">
+                    {{ __('Attend classes taught by working professionals and earn your credential.') }}
+                </p>
+            </li>
+        </ol>
+    </x-marketing.section>
 </div>
