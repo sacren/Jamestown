@@ -20,6 +20,5 @@ class CourseObserver
     private function forgetHomeCache(): void
     {
         Cache::forget('home.course-count');
-        Cache::forget('home.featured-programs');
     }
 }

@@ -34,39 +34,35 @@ new #[Layout('layouts::marketing', [
     }
 
     #[Computed]
-    public function currentTerm(): ?Term
+    public function currentTermName(): ?string
     {
-        return Cache::remember('home.current-term', self::CACHE_TTL_SECONDS, function () {
+        return Cache::remember('home.current-term-name', self::CACHE_TTL_SECONDS, function () {
             $today = today();
 
             return Term::query()
                 ->where('is_active', true)
                 ->where('start_date', '<=', $today)
                 ->where('end_date', '>=', $today)
-                ->orderBy('start_date', 'desc')
-                ->first()
+                ->orderByDesc('start_date')
+                ->value('name')
                 ?? Term::query()
                     ->where('is_active', true)
                     ->where('start_date', '>', $today)
                     ->orderBy('start_date')
-                    ->first();
+                    ->value('name');
         });
     }
 
     #[Computed]
     public function featuredPrograms()
     {
-        return Cache::remember(
-            'home.featured-programs',
-            self::CACHE_TTL_SECONDS,
-            fn () => Program::query()
-                ->where('is_active', true)
-                ->withCount('activeCourses')
-                ->orderByDesc('active_courses_count')
-                ->orderBy('name')
-                ->limit(3)
-                ->get(),
-        );
+        return Program::query()
+            ->where('is_active', true)
+            ->withCount('activeCourses')
+            ->orderByDesc('active_courses_count')
+            ->orderBy('name')
+            ->limit(3)
+            ->get();
     }
 }; ?>
 
@@ -119,7 +115,7 @@ new #[Layout('layouts::marketing', [
                     {{ __('Current term') }}
                 </dt>
                 <dd class="mt-2 text-2xl font-bold text-zinc-900 dark:text-white sm:text-3xl">
-                    {{ $this->currentTerm?->name ?? __('Rolling enrollment') }}
+                    {{ $this->currentTermName ?? __('Rolling enrollment') }}
                 </dd>
             </div>
         </dl>

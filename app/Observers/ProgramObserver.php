@@ -20,6 +20,5 @@ class ProgramObserver
     private function forgetHomeCache(): void
     {
         Cache::forget('home.program-count');
-        Cache::forget('home.featured-programs');
     }
 }
