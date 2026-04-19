@@ -14,6 +14,13 @@ new #[Title('Program Details')] #[Layout('layouts::marketing')] class extends Co
         $this->program = $publicProgram;
     }
 
+    public function apply(): mixed
+    {
+        session()->flash('interested_program', $this->program->id);
+
+        return $this->redirect(route('register'), navigate: true);
+    }
+
     public function breadcrumbs(): array
     {
         return [
@@ -55,7 +62,7 @@ new #[Title('Program Details')] #[Layout('layouts::marketing')] class extends Co
             </div>
 
             <div class="mb-8 flex flex-wrap gap-3">
-                <flux:button variant="primary" :href="route('register')" wire:navigate>
+                <flux:button variant="primary" wire:click="apply">
                     {{ __('Apply to this program') }}
                 </flux:button>
                 <flux:button variant="ghost" :href="route('public.programs')" icon="arrow-left" wire:navigate>

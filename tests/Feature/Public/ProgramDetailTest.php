@@ -110,13 +110,13 @@ test('public program detail page shows an empty-courses notice when none are act
         ->assertSee(__('Course details will be published soon.'));
 });
 
-test('public program detail page links to register as the application CTA', function () {
+test('public program detail page renders an apply-to-this-program CTA', function () {
     $program = Program::factory()->create();
 
     $this->get(route('public.program', $program))
         ->assertOk()
         ->assertSee(__('Apply to this program'))
-        ->assertSee(route('register'));
+        ->assertSee('wire:click="apply"', false);
 });
 
 test('public catalog program cards link to the public slug detail route', function () {

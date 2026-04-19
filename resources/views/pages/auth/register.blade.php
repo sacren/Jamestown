@@ -1,6 +1,30 @@
 <x-layouts::auth :title="__('Register')">
+    @php
+        $interestedProgram = null;
+
+        if ($programId = session('interested_program')) {
+            $interestedProgram = \App\Models\Program::query()
+                ->where('id', $programId)
+                ->where('is_active', true)
+                ->first();
+
+            if ($interestedProgram) {
+                session()->reflash();
+            }
+        }
+    @endphp
+
     <div class="flex flex-col gap-6">
         <x-auth-header :title="__('Create an account')" :description="__('Enter your details below to create your account')" />
+
+        @if ($interestedProgram)
+            <flux:callout icon="academic-cap" color="blue" data-test="interested-program-banner">
+                <flux:callout.heading>{{ __('Applying to :name', ['name' => $interestedProgram->name]) }}</flux:callout.heading>
+                <flux:callout.text>
+                    {{ __("Create your account to continue. We'll pick up where you left off after you sign in.") }}
+                </flux:callout.text>
+            </flux:callout>
+        @endif
 
         <!-- Session Status -->
         <x-auth-session-status class="text-center" :status="session('status')" />
