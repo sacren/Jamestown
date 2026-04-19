@@ -83,7 +83,7 @@ new #[Title('Programs')] #[Layout('layouts::marketing', [
         @else
             <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                 @foreach ($this->programs as $program)
-                    <x-marketing.program-card :program="$program" />
+                    <x-marketing.program-card :program="$program" :href="route('public.program', $program)" />
                 @endforeach
             </div>
         @endif
