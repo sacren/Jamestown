@@ -189,3 +189,31 @@ test('home final CTA band invites authenticated users back to the dashboard', fu
         ->assertSee(__('Ready to continue?'), escape: false)
         ->assertDontSee(__('Ready to build your future?'), escape: false);
 });
+
+test('home page exposes a skip-to-main-content link targeting the main landmark', function () {
+    $response = $this->get(route('home'));
+
+    $response
+        ->assertSee('href="#main"', escape: false)
+        ->assertSee(__('Skip to main content'), escape: false)
+        ->assertSee('<main id="main"', escape: false);
+});
+
+test('home page has exactly one h1 containing the brand tagline', function () {
+    $response = $this->get(route('home'));
+
+    $content = $response->getContent();
+
+    expect(substr_count($content, '<h1'))->toBe(1);
+    expect($content)->toContain('Skills that build empires.');
+});
+
+test('home page does not skip heading levels from h2 to h4', function () {
+    $response = $this->get(route('home'));
+
+    $content = $response->getContent();
+
+    expect(substr_count($content, '<h2'))->toBeGreaterThan(0);
+    expect(substr_count($content, '<h3'))->toBeGreaterThan(0);
+    expect(substr_count($content, '<h4'))->toBe(0);
+});
