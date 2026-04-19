@@ -213,4 +213,34 @@ new #[Layout('layouts::marketing', [
             </div>
         </div>
     </x-marketing.section>
+
+    <section aria-label="{{ __('Call to action') }}" class="bg-zinc-900 py-16 sm:py-20 dark:bg-zinc-950">
+        <div class="mx-auto max-w-4xl px-6 text-center">
+            @auth
+                <h2 class="text-3xl font-bold tracking-tight text-white sm:text-4xl">
+                    {{ __('Ready to continue?') }}
+                </h2>
+                <p class="mx-auto mt-4 max-w-2xl text-lg text-zinc-300">
+                    {{ __('Your dashboard has everything you need to keep moving forward.') }}
+                </p>
+                <div class="mt-8">
+                    <flux:button :href="route('dashboard')" variant="primary" wire:navigate>
+                        {{ __('Go to dashboard') }}
+                    </flux:button>
+                </div>
+            @else
+                <h2 class="text-3xl font-bold tracking-tight text-white sm:text-4xl">
+                    {{ __('Ready to build your future?') }}
+                </h2>
+                <p class="mx-auto mt-4 max-w-2xl text-lg text-zinc-300">
+                    {{ __('Create your free account and take the first step toward a hands-on trade career.') }}
+                </p>
+                <div class="mt-8">
+                    <flux:button :href="route('register')" variant="primary" wire:navigate>
+                        {{ __('Create your account') }}
+                    </flux:button>
+                </div>
+            @endauth
+        </div>
+    </section>
 </div>
