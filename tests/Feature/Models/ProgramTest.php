@@ -57,7 +57,8 @@ test('deleting program cascades to courses', function () {
 test('programs table has a nullable slug column', function () {
     expect(Schema::hasColumn('programs', 'slug'))->toBeTrue();
 
-    $program = Program::factory()->create();
+    $program = Program::factory()->make(['slug' => null]);
+    $program->saveQuietly();
 
     expect($program->fresh()->slug)->toBeNull();
 });
@@ -67,3 +68,35 @@ test('programs table enforces unique slug constraint', function () {
 
     Program::factory()->create()->forceFill(['slug' => 'welding-technology'])->save();
 })->throws(QueryException::class);
+
+test('program auto-generates slug from name when slug is not provided', function () {
+    $program = Program::factory()->create(['name' => 'Welding Technology', 'slug' => null]);
+
+    expect($program->slug)->toBe('welding-technology');
+});
+
+test('program does not overwrite an explicitly provided slug', function () {
+    $program = Program::factory()->create([
+        'name' => 'Welding Technology',
+        'slug' => 'custom-slug',
+    ]);
+
+    expect($program->slug)->toBe('custom-slug');
+});
+
+test('program appends numeric suffix when generated slug collides', function () {
+    Program::factory()->create(['name' => 'Welding Technology', 'slug' => null]);
+    $second = Program::factory()->create(['name' => 'Welding Technology', 'slug' => null]);
+    $third = Program::factory()->create(['name' => 'Welding Technology', 'slug' => null]);
+
+    expect($second->slug)->toBe('welding-technology-2');
+    expect($third->slug)->toBe('welding-technology-3');
+});
+
+test('program slug stays stable when name changes after creation', function () {
+    $program = Program::factory()->create(['name' => 'Welding Technology', 'slug' => null]);
+
+    $program->update(['name' => 'Advanced Welding']);
+
+    expect($program->fresh()->slug)->toBe('welding-technology');
+});
