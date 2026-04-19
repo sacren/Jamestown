@@ -1,11 +1,12 @@
 @props([
     'program',
     'href' => null,
+    'level' => 2,
 ])
 
 <div wire:key="program-card-{{ $program->id }}" class="rounded-lg border border-zinc-200 p-6 dark:border-zinc-700">
     <div class="mb-3 flex items-center gap-2">
-        <flux:heading size="lg">{{ $program->name }}</flux:heading>
+        <flux:heading size="lg" :level="$level">{{ $program->name }}</flux:heading>
         <flux:badge size="sm" color="zinc">{{ $program->code }}</flux:badge>
     </div>
 

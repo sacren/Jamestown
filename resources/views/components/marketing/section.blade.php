@@ -3,10 +3,12 @@
     'heading' => null,
     'description' => null,
     'id' => null,
+    'level' => 2,
 ])
 
 @php
     $hasHeader = filled($eyebrow) || filled($heading) || filled($description);
+    $headingTag = 'h'.(in_array((int) $level, [1, 2, 3, 4], true) ? (int) $level : 2);
 @endphp
 
 <section @if($id) id="{{ $id }}" @endif {{ $attributes->merge(['class' => 'py-16 sm:py-20 lg:py-24']) }}>
@@ -20,9 +22,9 @@
                 @endif
 
                 @if(filled($heading))
-                    <h2 class="mt-2 text-3xl font-bold tracking-tight text-zinc-900 sm:text-4xl dark:text-white">
+                    <{{ $headingTag }} class="mt-2 text-3xl font-bold tracking-tight text-zinc-900 sm:text-4xl dark:text-white">
                         {{ $heading }}
-                    </h2>
+                    </{{ $headingTag }}>
                 @endif
 
                 @if(filled($description))

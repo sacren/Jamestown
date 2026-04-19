@@ -134,7 +134,7 @@ new #[Layout('layouts::marketing', [
         @else
             <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                 @foreach ($this->featuredPrograms as $program)
-                    <x-marketing.program-card :program="$program" />
+                    <x-marketing.program-card :program="$program" :level="3" />
                 @endforeach
             </div>
         @endif

@@ -40,6 +40,7 @@ new #[Title('Program Details')] #[Layout('layouts::marketing')] class extends Co
         :eyebrow="$program->code"
         :heading="$program->name"
         :description="$program->description"
+        :level="1"
     >
         <div class="mx-auto max-w-5xl">
             <div class="mb-8 grid gap-4 sm:grid-cols-4">
@@ -70,7 +71,7 @@ new #[Title('Program Details')] #[Layout('layouts::marketing')] class extends Co
                 </flux:button>
             </div>
 
-            <flux:heading size="lg" class="mb-4">{{ __('Courses in this program') }}</flux:heading>
+            <flux:heading size="lg" :level="2" class="mb-4">{{ __('Courses in this program') }}</flux:heading>
 
             @if ($program->activeCourses->isEmpty())
                 <flux:text variant="subtle">{{ __('Course details will be published soon.') }}</flux:text>

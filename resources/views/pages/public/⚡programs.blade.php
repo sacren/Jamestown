@@ -47,6 +47,7 @@ new #[Title('Programs')] #[Layout('layouts::marketing', [
         :eyebrow="__('Our programs')"
         :heading="__('Programs that build careers')"
         :description="__('Every program is hands-on, taught by working professionals, and designed to land you in the trades.')"
+        :level="1"
     >
         <div class="mb-8 flex flex-col gap-4 sm:flex-row">
             <div class="flex-1">
