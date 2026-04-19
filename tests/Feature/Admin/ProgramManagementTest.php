@@ -84,6 +84,34 @@ test('admin can create a new program', function () {
     expect($program)->not->toBeNull();
     expect($program->name)->toBe('Welding Technology');
     expect($program->duration_weeks)->toBe(36);
+    expect($program->slug)->toBe('welding-technology');
+});
+
+test('admin creating programs with duplicate names receives unique slugs', function () {
+    $admin = User::factory()->asAdmin()->create();
+
+    $this->actingAs($admin);
+
+    Livewire::test('pages::admin.programs.create')
+        ->set('name', 'Welding Technology')
+        ->set('code', 'WLDA')
+        ->set('duration_weeks', 36)
+        ->set('total_credits_required', 45)
+        ->set('tuition_cost', 15000)
+        ->call('createProgram')
+        ->assertHasNoErrors();
+
+    Livewire::test('pages::admin.programs.create')
+        ->set('name', 'Welding Technology')
+        ->set('code', 'WLDB')
+        ->set('duration_weeks', 36)
+        ->set('total_credits_required', 45)
+        ->set('tuition_cost', 15000)
+        ->call('createProgram')
+        ->assertHasNoErrors();
+
+    expect(Program::where('code', 'WLDA')->value('slug'))->toBe('welding-technology');
+    expect(Program::where('code', 'WLDB')->value('slug'))->toBe('welding-technology-2');
 });
 
 test('create program validates required fields', function () {
@@ -128,7 +156,8 @@ test('admin can view edit program page', function () {
 
 test('admin can update a program', function () {
     $admin = User::factory()->asAdmin()->create();
-    $program = Program::factory()->create();
+    $program = Program::factory()->create(['name' => 'Welding Technology']);
+    $originalSlug = $program->slug;
 
     $this->actingAs($admin);
 
@@ -145,6 +174,7 @@ test('admin can update a program', function () {
     expect($program->name)->toBe('Updated Program');
     expect($program->code)->toBe('UPD');
     expect($program->duration_weeks)->toBe(48);
+    expect($program->slug)->toBe($originalSlug);
 });
 
 test('update program validates unique code excluding self', function () {
