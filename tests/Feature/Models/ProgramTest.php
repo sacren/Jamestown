@@ -2,6 +2,8 @@
 
 use App\Models\Course;
 use App\Models\Program;
+use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\Schema;
 
 test('program has fillable attributes', function () {
     $program = Program::factory()->create([
@@ -51,3 +53,17 @@ test('deleting program cascades to courses', function () {
 
     expect(Course::where('program_id', $program->id)->count())->toBe(0);
 });
+
+test('programs table has a nullable slug column', function () {
+    expect(Schema::hasColumn('programs', 'slug'))->toBeTrue();
+
+    $program = Program::factory()->create();
+
+    expect($program->fresh()->slug)->toBeNull();
+});
+
+test('programs table enforces unique slug constraint', function () {
+    Program::factory()->create()->forceFill(['slug' => 'welding-technology'])->save();
+
+    Program::factory()->create()->forceFill(['slug' => 'welding-technology'])->save();
+})->throws(QueryException::class);
