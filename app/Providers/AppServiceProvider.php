@@ -3,10 +3,12 @@
 namespace App\Providers;
 
 use App\Enums\Role;
+use App\Models\Program;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Rules\Password;
 
@@ -27,6 +29,7 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->configureDefaults();
         $this->configureAuthorization();
+        $this->configureRouteBindings();
     }
 
     /**
@@ -59,5 +62,17 @@ class AppServiceProvider extends ServiceProvider
         Gate::before(function ($user, $ability) {
             return $user->hasRole(Role::SuperAdmin) ? true : null;
         });
+    }
+
+    /**
+     * Configure route model bindings scoped for public views.
+     */
+    protected function configureRouteBindings(): void
+    {
+        Route::bind('publicProgram', fn (string $slug): Program => Program::query()
+            ->where('slug', $slug)
+            ->where('is_active', true)
+            ->firstOrFail()
+        );
     }
 }

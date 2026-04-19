@@ -18,6 +18,8 @@ return Application::configure(basePath: dirname(__DIR__))
             Route::middleware('web')
                 ->group(base_path('routes/catalog.php'));
             Route::middleware('web')
+                ->group(base_path('routes/public.php'));
+            Route::middleware('web')
                 ->group(base_path('routes/registration.php'));
             Route::middleware('web')
                 ->group(base_path('routes/instructor.php'));
