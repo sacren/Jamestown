@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Program;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
 
 /**
  * @extends Factory<Program>
@@ -17,9 +18,12 @@ class ProgramFactory extends Factory
      */
     public function definition(): array
     {
+        $name = fake()->unique()->words(2, true).' Technology';
+
         return [
-            'name' => fake()->unique()->words(2, true).' Technology',
+            'name' => $name,
             'code' => strtoupper(fake()->unique()->lexify('???')),
+            'slug' => Str::slug($name),
             'description' => fake()->paragraph(),
             'duration_weeks' => fake()->numberBetween(16, 52),
             'total_credits_required' => fake()->numberBetween(30, 60),

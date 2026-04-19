@@ -4,6 +4,7 @@ use App\Models\Course;
 use App\Models\Program;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Str;
 
 test('program has fillable attributes', function () {
     $program = Program::factory()->create([
@@ -99,4 +100,12 @@ test('program slug stays stable when name changes after creation', function () {
     $program->update(['name' => 'Advanced Welding']);
 
     expect($program->fresh()->slug)->toBe('welding-technology');
+});
+
+test('program factory populates slug derived from the name', function () {
+    $program = Program::factory()->create();
+
+    expect($program->slug)
+        ->not->toBeNull()
+        ->and($program->slug)->toBe(Str::slug($program->name));
 });
