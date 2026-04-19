@@ -170,3 +170,22 @@ test('home renders role tiles for students, instructors, and administrators', fu
         __('Administrators'),
     ], escape: false);
 });
+
+test('home final CTA band invites guests to create an account', function () {
+    $response = $this->get(route('home'));
+
+    $response
+        ->assertSee(__('Ready to build your future?'), escape: false)
+        ->assertSee(__('Create your account'), escape: false)
+        ->assertSee(route('register'), escape: false);
+});
+
+test('home final CTA band invites authenticated users back to the dashboard', function () {
+    $this->actingAs(User::factory()->create());
+
+    $response = $this->get(route('home'));
+
+    $response
+        ->assertSee(__('Ready to continue?'), escape: false)
+        ->assertDontSee(__('Ready to build your future?'), escape: false);
+});
