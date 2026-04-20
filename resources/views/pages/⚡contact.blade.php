@@ -18,8 +18,16 @@ new #[Layout('layouts::marketing', [
 
     public string $message = '';
 
+    public string $website = '';
+
     public function submit(): mixed
     {
+        if (filled($this->website)) {
+            session()->flash('contact-sent', __('Thanks for your message — we will get back to you as soon as we can.'));
+
+            return $this->redirect(route('contact'), navigate: true);
+        }
+
         $validated = $this->validate(
             ContactFormRequest::sharedRules(),
             ContactFormRequest::sharedMessages(),
@@ -65,6 +73,19 @@ new #[Layout('layouts::marketing', [
             @endif
 
             <form wire:submit="submit" class="space-y-6">
+                <div aria-hidden="true" class="hidden">
+                    <label for="contact-website">{{ __('Website') }}</label>
+                    <input
+                        id="contact-website"
+                        type="text"
+                        wire:model="website"
+                        name="website"
+                        tabindex="-1"
+                        autocomplete="off"
+                        data-test="contact-honeypot"
+                    />
+                </div>
+
                 <flux:input
                     wire:model="name"
                     :label="__('Your name')"
