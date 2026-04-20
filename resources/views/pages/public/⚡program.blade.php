@@ -1,11 +1,11 @@
 <?php
 
 use App\Models\Program;
-use Livewire\Attributes\Layout;
+use Illuminate\Support\Str;
 use Livewire\Attributes\Title;
 use Livewire\Component;
 
-new #[Title('Program Details')] #[Layout('layouts::marketing')] class extends Component {
+new #[Title('Program Details')] class extends Component {
     public Program $program;
 
     public function mount(Program $publicProgram): void
@@ -28,6 +28,25 @@ new #[Title('Program Details')] #[Layout('layouts::marketing')] class extends Co
             ['label' => __('Programs'), 'href' => route('public.programs')],
             ['label' => $this->program->name],
         ];
+    }
+
+    public function metaDescription(): string
+    {
+        if (filled($this->program->description)) {
+            return Str::limit($this->program->description, 155);
+        }
+
+        return __(':name — a hands-on trade program at :brand.', [
+            'name' => $this->program->name,
+            'brand' => config('app.name'),
+        ]);
+    }
+
+    public function render()
+    {
+        return $this->view()->layout('layouts::marketing', [
+            'description' => $this->metaDescription(),
+        ]);
     }
 }; ?>
 

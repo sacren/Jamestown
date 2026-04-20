@@ -4,6 +4,7 @@ use App\Models\Course;
 use App\Models\Program;
 use App\Models\User;
 use Database\Seeders\RoleAndPermissionSeeder;
+use Illuminate\Support\Str;
 
 beforeEach(function () {
     $this->seed(RoleAndPermissionSeeder::class);
@@ -125,4 +126,42 @@ test('public catalog program cards link to the public slug detail route', functi
     $this->get(route('public.programs'))
         ->assertOk()
         ->assertSee(route('public.program', $program));
+});
+
+test('public program detail page sets a meta description from the program description', function () {
+    $program = Program::factory()->create([
+        'name' => 'Welding Technology',
+        'description' => 'Industrial welding fundamentals and advanced techniques, taught in our fully equipped shop.',
+    ]);
+
+    $this->get(route('public.program', $program))
+        ->assertOk()
+        ->assertSee('<meta name="description" content="Industrial welding fundamentals and advanced techniques, taught in our fully equipped shop.', false);
+});
+
+test('public program detail page truncates long descriptions in the meta tag', function () {
+    $long = str_repeat('welding ', 40);
+    $program = Program::factory()->create([
+        'name' => 'Welding Technology',
+        'description' => $long,
+    ]);
+
+    $expected = Str::limit($long, 155);
+
+    $this->get(route('public.program', $program))
+        ->assertOk()
+        ->assertSee('<meta name="description" content="'.$expected.'"', false);
+
+    expect(strlen($expected))->toBeLessThanOrEqual(158);
+});
+
+test('public program detail page falls back to a brand-aware meta description when program description is null', function () {
+    $program = Program::factory()->create([
+        'name' => 'HVAC Technology',
+        'description' => null,
+    ]);
+
+    $this->get(route('public.program', $program))
+        ->assertOk()
+        ->assertSee('<meta name="description" content="HVAC Technology — a hands-on trade program at '.config('app.name').'."', false);
 });
