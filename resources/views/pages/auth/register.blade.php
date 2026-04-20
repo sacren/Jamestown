@@ -15,7 +15,7 @@
     @endphp
 
     <div class="flex flex-col gap-6">
-        <x-auth-header :title="__('Create an account')" :description="__('Enter your details below to create your account')" />
+        <x-auth-header :title="__('Create your account')" :description="__('Tell us about yourself to get started.')" />
 
         @if ($interestedProgram)
             <flux:callout icon="academic-cap" color="blue" data-test="interested-program-banner">
