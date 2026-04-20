@@ -15,6 +15,12 @@
                 <div class="flex flex-col gap-6">
                     {{ $slot }}
                 </div>
+
+                <div class="text-center text-sm">
+                    <flux:link :href="route('home')" variant="subtle" wire:navigate>
+                        {{ __('Back to home') }}
+                    </flux:link>
+                </div>
             </div>
         </div>
         @fluxScripts
