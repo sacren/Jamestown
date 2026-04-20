@@ -4,6 +4,8 @@ use App\Http\Requests\ContactFormRequest;
 use App\Mail\ContactMessageReceipt;
 use App\Mail\ContactMessageReceived;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 
@@ -22,6 +24,18 @@ new #[Layout('layouts::marketing', [
 
     public function submit(): mixed
     {
+        $throttleKey = 'contact|'.request()->ip();
+
+        if (RateLimiter::tooManyAttempts($throttleKey, 3)) {
+            throw ValidationException::withMessages([
+                'message' => __('You have sent too many messages recently. Please try again in :minutes minutes.', [
+                    'minutes' => (int) ceil(RateLimiter::availableIn($throttleKey) / 60),
+                ]),
+            ]);
+        }
+
+        RateLimiter::hit($throttleKey, 3600);
+
         if (filled($this->website)) {
             session()->flash('contact-sent', __('Thanks for your message — we will get back to you as soon as we can.'));
 
