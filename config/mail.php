@@ -115,4 +115,17 @@ return [
         'name' => env('MAIL_FROM_NAME', env('APP_NAME', 'Laravel')),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Administrator Destination
+    |--------------------------------------------------------------------------
+    |
+    | The inbox that receives notifications from the public contact form.
+    | Defaults to the global "from" address so development environments
+    | without MAIL_ADMIN_ADDRESS set still deliver somewhere sensible.
+    |
+    */
+
+    'admin_address' => env('MAIL_ADMIN_ADDRESS', env('MAIL_FROM_ADDRESS', 'hello@example.com')),
+
 ];
