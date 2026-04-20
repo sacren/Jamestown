@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::livewire('/', 'pages::home')->name('home');
 Route::livewire('/about', 'pages::about')->name('about');
+Route::livewire('/privacy', 'pages::privacy')->name('privacy');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::livewire('dashboard', 'pages::dashboard')->name('dashboard');
