@@ -1,2 +1,15 @@
+# robots.txt for Empire Trade School
+# Public-facing marketing, catalog, and auth pages are indexable.
+# Authenticated areas (admin, dashboard, instructor, registration, settings)
+# are excluded from crawling.
+
 User-agent: *
-Disallow:
+Allow: /
+
+Disallow: /admin
+Disallow: /dashboard
+Disallow: /instructor
+Disallow: /registration
+Disallow: /settings
+
+Sitemap: /sitemap.xml
