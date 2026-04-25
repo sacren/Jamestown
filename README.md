@@ -7,6 +7,20 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
+## Empire Trade School
+
+A demonstration trade school student information system: programs, courses, terms, sections, rooms, scheduling, enrollment workflow, attendance, assessments and grading, payments and invoicing, certificates and transcripts, announcements, role-aware notifications and dashboards, and admin reporting — plus a public marketing site with SEO and a branded auth flow. Built with Laravel 13, Livewire 4, Flux UI Free v2, Tailwind v4, and Fortify.
+
+945 tests passing. Pint-clean. One commit per purpose.
+
+## How this was built
+
+This app was built plan-before-build with Claude Code as an AI orchestration tool, not as a code-completion crutch. Each phase opened with a written plan: a Context section, a numbered list of *locked* design decisions with rationale, a step-by-step implementation order, explicit test targets per step, and invariants that had to hold after every commit (tests green on main, Pint clean, dark mode parity, no new dependencies). Lessons surfaced during one phase fed forward as bug-prevention rules in the next.
+
+- **The method:** see [`docs/ai-workflow.md`](docs/ai-workflow.md).
+- **A representative phase plan (Phase 7 — Payments):** see [`docs/sample-plan.md`](docs/sample-plan.md).
+- The full planning archive (Phases 7–10 plus the public UI overhaul) is available on request.
+
 ## About Laravel
 
 Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
